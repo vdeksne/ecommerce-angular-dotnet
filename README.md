@@ -96,4 +96,3 @@ ng serve
 
 14. Then browse to [https://localhost:4200](https://localhost:4200)
 15. You can use the Stripe test cards available from [here](https://docs.stripe.com/testing#cards) to pay for the orders.
-# ecommerce-angular-dotnet
