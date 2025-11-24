@@ -1,0 +1,66 @@
+.product-form-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.product-form-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+mat-form-field {
+  width: 100%;
+  display: block;
+}
+
+.image-upload-section {
+  border: 1px solid #000000;
+  border-radius: 8px;
+  padding: 1.5rem;
+  background-color: #ffffff;
+  margin: 1rem 0;
+}
+
+.image-preview {
+  max-height: 200px;
+  border-radius: 8px;
+  border: 2px solid #000000;
+  margin-top: 1rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  padding-top: 1.5rem;
+  border-top: 1px solid #000000;
+  margin-top: 1.5rem;
+}
+
+// Ensure all form fields are visible
+::ng-deep {
+  .mat-mdc-form-field {
+    display: block !important;
+    
+    .mat-mdc-text-field-wrapper {
+      background-color: white;
+    }
+    
+    .mat-mdc-form-field-input-control {
+      color: #000000;
+    }
+    
+    .mat-mdc-form-field-label {
+      color: #000000;
+    }
+  }
+  
+  .mat-mdc-form-field-hint-wrapper,
+  .mat-mdc-form-field-error-wrapper {
+    display: block;
+  }
+}
+

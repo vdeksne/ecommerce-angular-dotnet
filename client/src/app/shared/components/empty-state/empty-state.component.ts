@@ -1,7 +1,6 @@
 import { Component, inject, input, output } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { RouterLink } from '@angular/router';
 import { BusyService } from '../../../core/services/busy.service';
 
 @Component({
@@ -9,8 +8,7 @@ import { BusyService } from '../../../core/services/busy.service';
   standalone: true,
   imports: [
     MatIcon,
-    MatButton,
-    RouterLink
+    MatButton
   ],
   templateUrl: './empty-state.component.html',
   styleUrl: './empty-state.component.scss'

@@ -74,11 +74,28 @@ public class PaymentService : IPaymentService
         }
         else
         {
-            var options = new PaymentIntentUpdateOptions
+            try
             {
-                Amount = total
-            };
-            await service.UpdateAsync(cart.PaymentIntentId, options);
+                var options = new PaymentIntentUpdateOptions
+                {
+                    Amount = total
+                };
+                await service.UpdateAsync(cart.PaymentIntentId, options);
+            }
+            catch (StripeException ex) when (ex.StripeError?.Code == "resource_missing" || ex.Message.Contains("No such payment_intent"))
+            {
+                // Payment intent doesn't exist (e.g., from test keys), create a new one
+                cart.PaymentIntentId = null;
+                var createOptions = new PaymentIntentCreateOptions
+                {
+                    Amount = total,
+                    Currency = "usd",
+                    PaymentMethodTypes = ["card"]
+                };
+                var intent = await service.CreateAsync(createOptions);
+                cart.PaymentIntentId = intent.Id;
+                cart.ClientSecret = intent.ClientSecret;
+            }
         }
     }
 

@@ -1,18 +1,70 @@
 .custom-badge .mat-badge-content {
-    width: 24px;
-    height: 24px;
-    font-size: 14px;
-    line-height: 24px;
+  width: 24px;
+  height: 24px;
+  font-size: 14px;
+  line-height: 24px;
 }
 
 .custom-badge .mat-icon {
-    font-size: 32px;
-    width: 32px;
-    height: 32px;
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
 }
 
 a {
-    &.active {
-        color: #7d00fa;
-    }
+  &.active {
+    color: #000000;
+  }
+}
+
+.logo-text {
+  font-family: "Nunito Sans", sans-serif;
+  font-weight: 700; // Bold
+  font-size: 20px;
+  line-height: 19px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #000000;
+  text-decoration: none;
+  margin-right: 28px; // mr-7 equivalent
+  max-height: 64px; // max-h-16 equivalent
+  display: flex;
+  align-items: center;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #000000;
+  }
+
+  &.active {
+    color: #000000;
+  }
+}
+
+.cart-link {
+  font-family: "Nunito Sans", sans-serif;
+  color: #fff;
+  text-align: center;
+  line-height: 1.1875rem; /* 95% */
+  letter-spacing: 0.0625rem;
+  text-transform: uppercase;
+  background: #000;
+  display: inline-flex;
+  padding: 0.75rem 1.25rem;
+  justify-content: center;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: -0.75rem !important;
+}
+
+.cart-link p {
+  color: #fff;
+  font-family: "Nunito Sans", sans-serif;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 1.1875rem; /* 95% */
+  letter-spacing: 0.0625rem;
+  text-transform: uppercase;
+  text-decoration: none;
 }

@@ -11,6 +11,10 @@ import { adminGuard } from './core/guards/admin.guard';
 
 export const routes: Routes = [
     {path: '', component: HomeComponent},
+    {path: 'archive', loadComponent: () => import('./features/archive/archive')
+        .then(c => c.ArchiveComponent)},
+    {path: 'context', loadComponent: () => import('./features/context/context')
+        .then(c => c.ContextComponent)},
     {path: 'shop', component: ShopComponent},
     {path: 'shop/:id', component: ProductDetailsComponent},
     {path: 'cart', component: CartComponent},

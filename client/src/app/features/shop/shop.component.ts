@@ -1,7 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { ShopService } from '../../core/services/shop.service';
 import { Product } from '../../shared/models/product';
-import { MatCard } from '@angular/material/card';
 import { ProductItemComponent } from "./product-item/product-item.component";
 import { MatDialog } from '@angular/material/dialog';
 import { FiltersDialogComponent } from './filters-dialog/filters-dialog.component';
@@ -19,7 +18,6 @@ import { EmptyStateComponent } from "../../shared/components/empty-state/empty-s
   selector: 'app-shop',
   standalone: true,
   imports: [
-    MatCard,
     ProductItemComponent,
     MatButton,
     MatIcon,

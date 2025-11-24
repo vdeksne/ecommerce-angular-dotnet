@@ -1,0 +1,24 @@
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  padding-left: 16rem; // Account for sidebar (63px left + 76px width + spacing)
+  transition: padding-left 0.3s ease;
+  flex: 1;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .container {
+    padding-left: 0; // Sidebar becomes horizontal on mobile
+  }
+}

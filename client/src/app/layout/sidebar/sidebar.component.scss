@@ -1,0 +1,420 @@
+.sidebar {
+  position: fixed;
+  left: 4rem;
+  top: 115.5px;
+  // width: 76px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  z-index: 40;
+  color: #000000;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  align-items: flex-start;
+  color: #000000;
+}
+
+.nav-link {
+  font-family: "Nunito Sans", sans-serif;
+  font-weight: 700; // Bold
+  font-size: 11.6px;
+  line-height: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #000000;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 16px;
+  width: 100%;
+  transition: color 0.2s ease;
+
+  &:hover {
+    // color: #7d00fa;
+    background-color: transparent;
+  }
+
+  &.active {
+    // color: #7d00fa;
+    background-color: transparent;
+  }
+}
+
+.sidebar-account {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  margin-top: auto;
+}
+
+.account-button {
+  font-family: "Nunito Sans", sans-serif;
+  font-weight: 700;
+  font-size: 11.6px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 !important;
+  min-width: auto;
+  width: 100%;
+  justify-content: flex-start;
+  color: #000000 !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  transition: none !important;
+  --mat-button-text-label-text-color: #000000 !important;
+  --mdc-text-button-hover-state-layer-color: transparent !important;
+  --mdc-text-button-focus-state-layer-color: transparent !important;
+  --mdc-text-button-pressed-state-layer-color: transparent !important;
+  --mdc-text-button-container-shape: 0 !important;
+
+  // Disable ALL transitions and animations
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  &:hover {
+    color: #000000 !important;
+    font-weight: 900;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    transition: none !important;
+  }
+
+  &:focus {
+    color: #000000 !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    transition: none !important;
+    outline: none !important;
+  }
+
+  &:active {
+    color: #000000 !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    transition: none !important;
+  }
+
+  &:focus-visible {
+    color: #000000 !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    outline: none !important;
+  }
+
+  &.active {
+    color: #000000 !important;
+    font-weight: 900;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    transition: none !important;
+  }
+
+  // Completely remove all Material internal elements
+  ::ng-deep {
+    .mdc-button__ripple,
+    .mat-mdc-button-persistent-ripple,
+    .mdc-button__focus-ring,
+    .mdc-ripple-surface,
+    .mat-ripple-element {
+      display: none !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+    }
+  }
+}
+
+// More specific Material overrides for account button
+.account-button.mat-mdc-button {
+  --mdc-text-button-hover-state-layer-color: transparent !important;
+  --mdc-text-button-focus-state-layer-color: transparent !important;
+  --mdc-text-button-pressed-state-layer-color: transparent !important;
+  --mat-button-text-label-text-color: #000000 !important;
+  transition: none !important;
+
+  .mdc-button__ripple,
+  .mat-mdc-button-persistent-ripple,
+  .mdc-button__focus-ring {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
+
+  &:hover {
+    --mdc-text-button-hover-state-layer-color: transparent !important;
+    background-color: transparent !important;
+    transition: none !important;
+  }
+
+  &:focus {
+    --mdc-text-button-focus-state-layer-color: transparent !important;
+    background-color: transparent !important;
+    transition: none !important;
+    outline: none !important;
+  }
+
+  &:active {
+    --mdc-text-button-pressed-state-layer-color: transparent !important;
+    background-color: transparent !important;
+    transition: none !important;
+  }
+
+  &:focus-visible {
+    --mdc-text-button-focus-state-layer-color: transparent !important;
+    background-color: transparent !important;
+    outline: none !important;
+  }
+}
+
+.account-button-content {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.account-button-icon {
+  margin-left: 0;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .sidebar {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: 100%;
+    padding: 20px;
+    background: white;
+    border-bottom: 1px solid #000000;
+  }
+
+  .sidebar-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .sidebar-account {
+    flex-direction: row;
+    margin-top: 16px;
+  }
+}
+
+button {
+  // padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  background-color: transparent !important;
+
+  &:hover {
+    background-color: transparent !important;
+  }
+  &.active {
+    background-color: transparent !important;
+  }
+}
+// Global Material button overrides for sidebar (only for account button)
+.sidebar-account .mat-mdc-button {
+  --mdc-text-button-hover-state-layer-color: transparent !important;
+  --mdc-text-button-focus-state-layer-color: transparent !important;
+  --mdc-text-button-pressed-state-layer-color: transparent !important;
+  --mat-button-text-label-text-color: #000000 !important;
+  background-color: transparent !important;
+  transition: none !important;
+  animation: none !important;
+
+  // Remove all state layer opacity
+  --mdc-text-button-hover-state-layer-opacity: 0 !important;
+  --mdc-text-button-focus-state-layer-opacity: 0 !important;
+  --mdc-text-button-pressed-state-layer-opacity: 0 !important;
+
+  &:not(:disabled) {
+    color: #000000 !important;
+    background-color: transparent !important;
+    transition: none !important;
+  }
+
+  &:hover {
+    color: #000000 !important;
+    background-color: transparent !important;
+    --mdc-text-button-hover-state-layer-color: transparent !important;
+    --mdc-text-button-hover-state-layer-opacity: 0 !important;
+    transition: none !important;
+  }
+
+  &:focus {
+    color: #000000 !important;
+    background-color: transparent !important;
+    --mdc-text-button-focus-state-layer-color: transparent !important;
+    --mdc-text-button-focus-state-layer-opacity: 0 !important;
+    transition: none !important;
+    outline: none !important;
+  }
+
+  &:active {
+    color: #000000 !important;
+    background-color: transparent !important;
+    --mdc-text-button-pressed-state-layer-color: transparent !important;
+    --mdc-text-button-pressed-state-layer-opacity: 0 !important;
+    transition: none !important;
+  }
+
+  &:focus-visible {
+    outline: none !important;
+    background-color: transparent !important;
+  }
+
+  // Hide ripple and state layers completely
+  .mdc-button__ripple,
+  .mat-mdc-button-persistent-ripple,
+  .mdc-button__focus-ring,
+  .mdc-ripple-surface,
+  .mat-ripple-element {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  // Target the state layer directly
+  .mdc-button__state-layer {
+    display: none !important;
+    opacity: 0 !important;
+    background-color: transparent !important;
+  }
+}
+
+.button-modern {
+  height: 100%;
+}
+
+// Modern dropdown menu styling - black and white only
+::ng-deep .modern-menu {
+  background: #ffffff !important;
+  border: 1px solid #000000 !important;
+  border-radius: 0 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+  padding: 8px 0 !important;
+  min-width: 180px !important;
+  margin-top: 8px !important;
+
+  .mat-mdc-menu-content {
+    padding: 0 !important;
+  }
+}
+
+.modern-menu-item {
+  font-family: "Nunito Sans", sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 11.6px !important;
+  letter-spacing: 1px !important;
+  text-transform: uppercase !important;
+  color: #000000 !important;
+  background-color: #ffffff !important;
+  padding: 12px 20px !important;
+  min-height: 44px !important;
+  width: 100% !important;
+  border: none !important;
+  border-radius: 0 !important;
+  transition: background-color 0.15s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  margin: 0 !important;
+
+  // Remove Material defaults
+  --mdc-menu-item-hover-state-layer-color: #000000 !important;
+  --mdc-menu-item-hover-state-layer-opacity: 0.08 !important;
+  --mdc-menu-item-focus-state-layer-color: #000000 !important;
+  --mdc-menu-item-focus-state-layer-opacity: 0.12 !important;
+
+  &:hover {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    --mdc-menu-item-hover-state-layer-color: transparent !important;
+  }
+
+  &:focus {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    outline: none !important;
+    --mdc-menu-item-focus-state-layer-color: transparent !important;
+  }
+
+  &:active {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+  }
+
+  .menu-item-text {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  // Remove Material icons if any
+  mat-icon {
+    display: none !important;
+  }
+
+  // Hide ripple effects
+  .mdc-menu-item__ripple,
+  .mat-mdc-menu-item-ripple {
+    display: none !important;
+  }
+}
+
+.menu-divider {
+  height: 1px;
+  background-color: #000000;
+  margin: 8px 0;
+  border: none;
+  opacity: 0.2;
+}
+
+// Override Material menu item defaults
+::ng-deep .modern-menu {
+  .mat-mdc-menu-item {
+    font-family: "Nunito Sans", sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 11.6px !important;
+    letter-spacing: 1px !important;
+    text-transform: uppercase !important;
+    color: #000000 !important;
+    background-color: #ffffff !important;
+    padding: 12px 20px !important;
+    min-height: 44px !important;
+
+    &:hover {
+      background-color: #000000 !important;
+      color: #ffffff !important;
+    }
+
+    &:focus {
+      background-color: #000000 !important;
+      color: #ffffff !important;
+    }
+
+    .mdc-menu-item__ripple {
+      display: none !important;
+    }
+  }
+
+  // Hide Material divider and use custom one
+  .mat-mdc-menu-divider {
+    display: none !important;
+  }
+}

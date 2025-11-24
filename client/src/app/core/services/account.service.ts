@@ -20,8 +20,20 @@ export class AccountService {
 
   login(values: any) {
     let params = new HttpParams();
-    params = params.append('useCookies', true);
-    return this.http.post<User>(this.baseUrl + 'login', values, {params}).pipe(
+    params = params.append('useCookies', 'true');
+    
+    // Identity API expects email and password
+    const loginData = {
+      email: values.email || values.username || '',
+      password: values.password || '',
+      twoFactorCode: values.twoFactorCode || '',
+      twoFactorRecoveryCode: values.twoFactorRecoveryCode || ''
+    };
+    
+    return this.http.post<User>(this.baseUrl + 'login', loginData, {
+      params,
+      withCredentials: true // Important for cookies
+    }).pipe(
       tap(() => this.signalrService.createHubConnection())
     )
   }

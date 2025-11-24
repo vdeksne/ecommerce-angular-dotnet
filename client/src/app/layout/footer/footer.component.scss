@@ -1,0 +1,30 @@
+.app-footer {
+  width: 100%;
+  padding: 20px 63px;
+  box-sizing: border-box;
+  margin-top: auto; // Push footer to bottom
+}
+
+.copyright {
+  width: 100%;
+  // max-width: 1202px;
+  margin: 0 auto;
+}
+
+.copyright p {
+  font-family: "Nunito Sans", sans-serif;
+  font-weight: 700; // Bold
+  font-size: 11.6px;
+  line-height: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #000000;
+  margin: 0;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .app-footer {
+    padding: 20px;
+  }
+}

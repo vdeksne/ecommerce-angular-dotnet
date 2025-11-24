@@ -1,0 +1,67 @@
+<aside class="sidebar">
+  <nav class="sidebar-nav">
+    <a routerLink="/archive" routerLinkActive="active" class="nav-link"
+      >Archive</a
+    >
+    <a routerLink="/shop" routerLinkActive="active" class="nav-link">Collect</a>
+    <a routerLink="/context" routerLinkActive="active" class="nav-link"
+      >Context</a
+    >
+    <a routerLink="/test-error" routerLinkActive="active" class="nav-link"
+      >Errors</a
+    >
+    <a
+      *appIsAdmin
+      routerLink="/admin"
+      routerLinkActive="active"
+      class="nav-link"
+      >Admin</a
+    >
+  </nav>
+
+  <!-- Account Section -->
+  <div class="sidebar-account button-modern">
+    @if (accountService.currentUser()) {
+    <button
+      mat-button
+      [matMenuTriggerFor]="menu"
+      class="account-button"
+      [disableRipple]="true"
+      style="height: 100%"
+    >
+      <span class="account-button-content">
+        {{ getDisplayName() }}
+        <mat-icon class="account-button-icon">arrow_drop_down</mat-icon>
+      </span>
+    </button>
+    } @else {
+    <a routerLink="/account/login" routerLinkActive="active" class="nav-link"
+      >Login</a
+    >
+    <a routerLink="/account/register" routerLinkActive="active" class="nav-link"
+      >Register</a
+    >
+    }
+  </div>
+
+  <mat-menu #menu="matMenu" class="modern-menu">
+    <button
+      mat-menu-item
+      class="modern-menu-item"
+      (click)="navigateTo('/cart')"
+    >
+      <span class="menu-item-text">Cart</span>
+    </button>
+    <button
+      mat-menu-item
+      class="modern-menu-item"
+      (click)="navigateTo('/orders')"
+    >
+      <span class="menu-item-text">Orders</span>
+    </button>
+    <div class="menu-divider"></div>
+    <button mat-menu-item class="modern-menu-item" (click)="logout()">
+      <span class="menu-item-text">Logout</span>
+    </button>
+  </mat-menu>
+</aside>

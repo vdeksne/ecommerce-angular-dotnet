@@ -6,10 +6,22 @@
         <mat-form-field appearance="outline" class="w-full mb-4">
             <mat-label>Email address</mat-label>
             <input formControlName="email" type="email" placeholder="name@example.com" matInput />
+            @if (loginForm.get('email')?.hasError('required') && loginForm.get('email')?.touched) {
+                <mat-error>Email is required</mat-error>
+            }
+            @if (loginForm.get('email')?.hasError('email') && loginForm.get('email')?.touched) {
+                <mat-error>Please enter a valid email address</mat-error>
+            }
         </mat-form-field>
         <mat-form-field appearance="outline" class="w-full mb-4">
             <mat-label>Password</mat-label>
             <input formControlName="password" type="password" placeholder="Password" matInput />
+            @if (loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched) {
+                <mat-error>Password is required</mat-error>
+            }
+            @if (loginForm.get('password')?.hasError('minlength') && loginForm.get('password')?.touched) {
+                <mat-error>Password must be at least 6 characters</mat-error>
+            }
         </mat-form-field>
         <button mat-flat-button type="submit" class="w-full py-2">Sign in</button>
     </form>

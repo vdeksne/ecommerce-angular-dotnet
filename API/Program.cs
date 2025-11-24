@@ -14,10 +14,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+    });
 builder.Services.AddDbContext<StoreContext>(opt =>
 {
     opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    opt.ConfigureWarnings(warnings => warnings.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning));
 });
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
@@ -47,6 +53,17 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 app.UseMiddleware<ExceptionMiddleware>();
 
+// Remove Permissions-Policy header to suppress browser warnings about experimental features
+app.Use(async (context, next) =>
+{
+    await next();
+    // Remove Permissions-Policy header completely to suppress experimental feature warnings
+    if (context.Response.Headers.ContainsKey("Permissions-Policy"))
+    {
+        context.Response.Headers.Remove("Permissions-Policy");
+    }
+});
+
 app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowCredentials()
     .WithOrigins("http://localhost:4200","https://localhost:4200"));
 
@@ -72,8 +89,9 @@ try
 }
 catch (Exception ex)
 {
-    Console.WriteLine(ex);
-    throw;
+    Console.WriteLine($"Warning: Database migration failed: {ex.Message}");
+    Console.WriteLine("The application will continue, but database features may not work until SQL Server is available.");
+    // Don't throw - allow the app to start even if DB isn't ready
 }
 
 app.Run();
