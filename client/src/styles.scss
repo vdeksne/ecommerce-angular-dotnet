@@ -118,6 +118,25 @@ button.match-input-height {
     --mdc-snackbar-supporting-text-color: #ffffff;
 }
 
+// Progress bar styling - black only
+mat-progress-bar,
+.mat-mdc-progress-bar {
+    --mdc-linear-progress-active-indicator-color: #000000 !important;
+    --mdc-linear-progress-track-color: #f0f0f0 !important;
+    
+    .mdc-linear-progress__buffer {
+        background-color: #f0f0f0 !important;
+    }
+    
+    .mdc-linear-progress__bar-inner {
+        background-color: #000000 !important;
+    }
+    
+    .mdc-linear-progress__bar {
+        background-color: #000000 !important;
+    }
+}
+
 // Splash screen text
 #initial-splash {
     background-color: #ffffff;

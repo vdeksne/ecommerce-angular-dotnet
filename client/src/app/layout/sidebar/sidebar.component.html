@@ -10,13 +10,9 @@
     <a routerLink="/test-error" routerLinkActive="active" class="nav-link"
       >Errors</a
     >
-    <a
-      *appIsAdmin
-      routerLink="/admin"
-      routerLinkActive="active"
-      class="nav-link"
-      >Admin</a
-    >
+    @if (accountService.isAdmin()) {
+    <a routerLink="/admin" routerLinkActive="active" class="nav-link">Admin</a>
+    }
   </nav>
 
   <!-- Account Section -->

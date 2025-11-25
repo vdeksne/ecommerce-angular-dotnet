@@ -120,7 +120,8 @@ async removeItemFromCart(productId: number, quantity = 1) {
       quantity: 0,
       pictureUrl: item.pictureUrl,
       brand: item.brand,
-      type: item.type
+      type: item.type,
+      quantityInStock: item.quantityInStock
     }
   }
 

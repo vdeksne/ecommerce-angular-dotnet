@@ -1,0 +1,249 @@
+// Product Details Page - Figma Design Implementation
+// Black and white only, Nunito Sans font
+
+.product-details-container {
+  width: 100%;
+  min-height: 100vh;
+  background: white;
+  font-family: 'Nunito Sans', sans-serif;
+  padding: 2rem;
+}
+
+.product-layout {
+  max-width: 1920px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 542px 1fr;
+  gap: 37px;
+  align-items: start;
+}
+
+// Left Side: Images
+.images-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.main-image-container {
+  width: 542px;
+  height: 361px;
+  background: #d9d9d9;
+  overflow: hidden;
+  
+  .main-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.detail-images {
+  display: flex;
+  gap: 16px;
+}
+
+.detail-image-item {
+  width: 263px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.detail-image {
+  width: 263px;
+  height: 175px;
+  background: #d9d9d9;
+  object-fit: cover;
+}
+
+.detail-caption {
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 18px;
+  text-align: center;
+  text-transform: capitalize;
+  color: black;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+// Right Side: Product Information
+.product-info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 37px;
+  max-width: 613px;
+}
+
+.title-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.product-title {
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 18px;
+  text-transform: capitalize;
+  color: black;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+.product-subtitle {
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 18px;
+  color: black;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+.product-note {
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 300;
+  font-size: 10px;
+  line-height: 18px;
+  color: black;
+  margin: 0;
+}
+
+.purchase-section {
+  display: flex;
+  gap: 37px;
+  align-items: flex-end;
+}
+
+.edition-info {
+  width: 218px;
+  
+  p {
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 300;
+    font-size: 12px;
+    line-height: 18px;
+    text-transform: capitalize;
+    color: black;
+    letter-spacing: 1px;
+    margin: 0;
+    white-space: nowrap;
+  }
+}
+
+.price-section {
+  width: 218px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.product-price {
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 300;
+  font-size: 20px;
+  line-height: 18px;
+  text-transform: capitalize;
+  color: black;
+  letter-spacing: 1px;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.inquire-button {
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 18px;
+  text-transform: capitalize;
+  color: black;
+  letter-spacing: 1px;
+  border: 1px solid black;
+  padding: 8px 24px;
+  background: white;
+  
+  &:hover {
+    background: black;
+    color: white;
+  }
+}
+
+.description-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 177px;
+}
+
+.product-description {
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 18px;
+  text-transform: capitalize;
+  color: black;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+// Responsive adjustments
+@media (max-width: 1200px) {
+  .product-layout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .images-section {
+    width: 100%;
+  }
+  
+  .main-image-container {
+    width: 100%;
+    max-width: 542px;
+    height: auto;
+    aspect-ratio: 542 / 361;
+  }
+  
+  .detail-images {
+    flex-wrap: wrap;
+  }
+  
+  .detail-image-item {
+    width: calc(50% - 8px);
+  }
+  
+  .detail-image {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 263 / 175;
+  }
+  
+  .product-info-section {
+    max-width: 100%;
+  }
+  
+  .purchase-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}
+
+// Override Material button styles
+::ng-deep {
+  .inquire-button {
+    .mat-mdc-button-persistent-ripple {
+      display: none;
+    }
+    
+    .mat-ripple-element {
+      display: none;
+    }
+  }
+}
+

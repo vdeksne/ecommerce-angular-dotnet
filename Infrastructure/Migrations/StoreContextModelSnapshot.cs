@@ -134,6 +134,45 @@ namespace Infrastructure.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("Core.Entities.ArchiveImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsMainImage")
+                        .HasColumnType("bit");
+
+                    b.Property<double>("ObjectPositionX")
+                        .HasColumnType("float");
+
+                    b.Property<double>("ObjectPositionY")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ArchiveImages");
+                });
+
             modelBuilder.Entity("Core.Entities.DeliveryMethod", b =>
                 {
                     b.Property<int>("Id")
@@ -241,6 +280,12 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("DetailImage1Url")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DetailImage2Url")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -293,13 +338,13 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "7a96f0d7-b370-4293-b041-680e83ecf412",
+                            Id = "95c871f3-9510-4372-bb26-91223d1a7811",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "02617bc7-122e-4187-9201-381c0b85b6f1",
+                            Id = "06d2e2ce-a329-4eb1-b28e-fc610c6550f3",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         });

@@ -1,46 +1,88 @@
 @if (product) {
-    <section class="py-8">
-        <div class="max-w-screen-2xl px-4 mx-auto">
-            <div class="grid grid-cols-2 gap-8">
-                <div class="max-w-xl mx-auto">
-                    <img class="w-full" src="{{product.pictureUrl}}" alt="product image">
-                </div>
+<div class="product-details-container">
+  <div class="product-layout">
+    <!-- Left Side: Images -->
+    <div class="images-section">
+      <!-- Main Image -->
+      <div class="main-image-container">
+        <img
+          [src]="getImageUrl(product.pictureUrl)"
+          [alt]="product.name"
+          class="main-image"
+        />
+      </div>
 
-                <div>
-                    <h1 class="text-2xl font-semibold text-gray-900">{{product.name}}</h1>
-                    
-                    <p>You have {{quantityInCart}} of this item in your cart</p>
-                    
-                    <div class="mt-4 items-center gap-4 flex">
-                        <p class="text-3xl font-extrabold text-gray-900">
-                            {{product.price | currency}}
-                        </p>
-                    </div>
-
-                    <div class="flex gap-4 mt-6">
-                        <button [disabled]="quantity === quantityInCart" 
-                            (click)="updateCart()"
-                            mat-flat-button class="match-input-height">
-                            <mat-icon>shopping_cart</mat-icon>
-                            {{getButtonText()}}
-                        </button>
-
-                        <mat-form-field appearance="outline" class="flex">
-                            <mat-label>Quantity</mat-label>
-                            <input matInput min="0" [(ngModel)]="quantity" type="number">
-                        </mat-form-field>
-                    </div>
-
-                    <mat-divider></mat-divider>
-
-                    <p class="mt-6 text-gray-500">
-                        {{product.description}}
-                    </p>
-                </div>
-
-            </div>
+      <!-- Detail Images -->
+      <div class="detail-images">
+        <div class="detail-image-item">
+          <img
+            [src]="getImageUrl(product.detailImage1Url || product.pictureUrl)"
+            alt="Detail image 1"
+            class="detail-image"
+          />
+          <!-- <p class="detail-caption">(detail image 1)</p> -->
         </div>
-    </section>
+        <div class="detail-image-item">
+          <img
+            [src]="getImageUrl(product.detailImage2Url || product.pictureUrl)"
+            alt="Detail image 2"
+            class="detail-image"
+          />
+          <!-- <p class="detail-caption">(detail image 2)</p> -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Side: Product Information -->
+    <div class="product-info-section">
+      <!-- Title and Subtitle -->
+      <div class="title-section">
+        <h1 class="product-title">{{ product.name }}</h1>
+        <p class="product-subtitle">{{ getSubtitle() }}</p>
+        <p class="product-note">Painting dimensions shown in cm - unframed</p>
+        <div class="edition-info">
+          <p>{{ product.quantityInStock }} available</p>
+        </div>
+      </div>
+
+      <!-- Edition and Price -->
+      <div class="purchase-section">
+        <div class="price-section">
+          <p class="product-price">
+            {{ product.price | currency : "EUR" : "symbol" : "1.2-2" }}
+          </p>
+          <button
+            mat-stroked-button
+            class="inquire-button"
+            (click)="inquireToAcquire()"
+          >
+            Inquire to acquire
+          </button>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div class="description-section">
+        @for (paragraph of getFormattedDescription(); track $index; let isLast =
+        $last) {
+        <p class="product-description">
+          @for (line of paragraph.split('\n'); track $index; let isLineLast =
+          $last) { @if (line.trim()) {
+          {{ line.trim() }}@if (!isLineLast) {<br />} } }
+        </p>
+        @if (!isLast) {
+        <p class="product-description">&nbsp;</p>
+        } } @if (getFormattedDescription().length > 0) {
+        <p class="product-description">&nbsp;</p>
+        }
+        <!-- <p class="product-description">
+                        hand-signed and numbered by the artist as part of a limited edition —<br>
+                        artisanal frame glazed with acrylic, white passepartout.<br>
+                        sizes are determined individually, in accordance with each image's intent —<br>
+                        {{getDescriptionWithSize()}}
+                    </p> -->
+      </div>
+    </div>
+  </div>
+</div>
 }
-
-

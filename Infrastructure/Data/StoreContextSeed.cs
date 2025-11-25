@@ -9,16 +9,25 @@ public class StoreContextSeed
 {
     public static async Task SeedAsync(StoreContext context, UserManager<AppUser> userManager)
     {
-        if (!userManager.Users.Any(x => x.UserName == "admin@test.com"))
+        // Ensure admin user exists and has Admin role
+        var adminUser = await userManager.FindByEmailAsync("admin@test.com");
+        
+        if (adminUser == null)
         {
-            var user = new AppUser
+            adminUser = new AppUser
             {
                 UserName = "admin@test.com",
                 Email = "admin@test.com",
             };
 
-            await userManager.CreateAsync(user, "Pa$$w0rd");
-            await userManager.AddToRoleAsync(user, "Admin");
+            await userManager.CreateAsync(adminUser, "Pa$$w0rd");
+        }
+
+        // Ensure admin user has Admin role (assign even if user already exists)
+        var isInAdminRole = await userManager.IsInRoleAsync(adminUser, "Admin");
+        if (!isInAdminRole)
+        {
+            await userManager.AddToRoleAsync(adminUser, "Admin");
         }
 
         var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -47,6 +56,20 @@ public class StoreContextSeed
             if (methods == null) return;
 
             context.DeliveryMethods.AddRange(methods);
+
+            await context.SaveChangesAsync();
+        }
+
+        if (!context.ArchiveImages.Any())
+        {
+            var archiveData = await File
+                .ReadAllTextAsync(path + @"/Data/SeedData/archive-images.json");
+
+            var archiveImages = JsonSerializer.Deserialize<List<ArchiveImage>>(archiveData);
+
+            if (archiveImages == null) return;
+
+            context.ArchiveImages.AddRange(archiveImages);
 
             await context.SaveChangesAsync();
         }

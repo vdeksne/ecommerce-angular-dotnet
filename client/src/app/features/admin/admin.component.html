@@ -134,15 +134,15 @@
               }
             </mat-form-field>
 
-            <!-- Brand and Type Row -->
+            <!-- Surface and Media Row -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <mat-form-field appearance="outline" class="w-full">
-                <mat-label>Brand *</mat-label>
+                <mat-label>Surface *</mat-label>
                 <input
                   matInput
                   formControlName="brand"
                   [matAutocomplete]="brandAuto"
-                  placeholder="Select or type brand"
+                  placeholder="Select or type surface (e.g., canvas, paper)"
                 />
                 <mat-autocomplete #brandAuto="matAutocomplete">
                   @for (brand of brands; track brand) {
@@ -152,17 +152,17 @@
                 <mat-icon matPrefix>category</mat-icon>
                 @if (productForm.get('brand')?.hasError('required') &&
                 productForm.get('brand')?.touched) {
-                <mat-error>Brand is required</mat-error>
+                <mat-error>Surface is required</mat-error>
                 }
               </mat-form-field>
 
               <mat-form-field appearance="outline" class="w-full">
-                <mat-label>Type *</mat-label>
+                <mat-label>Media *</mat-label>
                 <input
                   matInput
                   formControlName="type"
                   [matAutocomplete]="typeAuto"
-                  placeholder="Select or type product type"
+                  placeholder="Select or type media (e.g., oil paint, watercolor)"
                 />
                 <mat-autocomplete #typeAuto="matAutocomplete">
                   @for (type of types; track type) {
@@ -172,9 +172,67 @@
                 <mat-icon matPrefix>label</mat-icon>
                 @if (productForm.get('type')?.hasError('required') &&
                 productForm.get('type')?.touched) {
-                <mat-error>Type is required</mat-error>
+                <mat-error>Media is required</mat-error>
                 }
               </mat-form-field>
+            </div>
+
+            <!-- Artwork Size -->
+            <div class="space-y-4">
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Artwork Size</mat-label>
+                <mat-select
+                  formControlName="artworkSize"
+                  (selectionChange)="onSizeSelectionChange($event)"
+                >
+                  <mat-option value="">None</mat-option>
+                  @for (size of commonSizes; track size.label) {
+                  <mat-option [value]="size.label">{{ size.label }}</mat-option>
+                  }
+                </mat-select>
+                <mat-icon matPrefix>straighten</mat-icon>
+              </mat-form-field>
+
+              <!-- Custom Size Inputs (shown when Custom Size is selected) -->
+              @if (useCustomSize || productForm.get('useCustomSize')?.value) {
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <mat-form-field appearance="outline" class="w-full">
+                  <mat-label>Width (cm) *</mat-label>
+                  <input
+                    matInput
+                    type="number"
+                    formControlName="customSizeWidth"
+                    placeholder="0"
+                    min="0"
+                    step="0.1"
+                  />
+                  <span matSuffix class="ml-2">cm</span>
+                  <mat-icon matPrefix>width</mat-icon>
+                  @if (productForm.get('customSizeWidth')?.hasError('required')
+                  && productForm.get('customSizeWidth')?.touched) {
+                  <mat-error>Width is required</mat-error>
+                  }
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="w-full">
+                  <mat-label>Height (cm) *</mat-label>
+                  <input
+                    matInput
+                    type="number"
+                    formControlName="customSizeHeight"
+                    placeholder="0"
+                    min="0"
+                    step="0.1"
+                  />
+                  <span matSuffix class="ml-2">cm</span>
+                  <mat-icon matPrefix>height</mat-icon>
+                  @if (productForm.get('customSizeHeight')?.hasError('required')
+                  && productForm.get('customSizeHeight')?.touched) {
+                  <mat-error>Height is required</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+              }
             </div>
 
             <!-- Price and Stock Row -->
@@ -281,7 +339,7 @@
                 <div class="mt-4">
                   <p class="text-sm text-gray-600 mb-2">Preview:</p>
                   <img
-                    [src]="imagePreview"
+                    [src]="getImageUrl(imagePreview)"
                     alt="Preview"
                     class="max-h-48 rounded-lg border-2 border-gray-300 shadow-sm"
                   />
@@ -291,13 +349,163 @@
                 <div class="mt-4">
                   <p class="text-sm text-gray-600 mb-2">Current Image:</p>
                   <img
-                    [src]="productForm.get('pictureUrl')?.value"
+                    [src]="getImageUrl(productForm.get('pictureUrl')?.value)"
                     alt="Current"
                     class="max-h-48 rounded-lg border-2 border-gray-300 shadow-sm"
                     onerror="this.style.display='none'"
                   />
                 </div>
                 }
+
+                <!-- Detail Image 1 Upload Section -->
+                <div class="mt-6 pt-6 border-t border-gray-300">
+                  <label class="block text-sm font-medium text-gray-700 mb-3"
+                    >Detail Image 1</label
+                  >
+
+                  <input
+                    type="file"
+                    id="detailImage1FileInput"
+                    accept="image/*"
+                    (change)="onDetailFile1Selected($event)"
+                    class="hidden"
+                  />
+
+                  <div class="space-y-4">
+                    <div class="flex gap-3 items-center">
+                      <button
+                        mat-raised-button
+                        type="button"
+                        (click)="selectDetailImage1File()"
+                        [disabled]="uploadingDetailImage1"
+                        color="primary"
+                      >
+                        <mat-icon>cloud_upload</mat-icon>
+                        <span class="ml-2">{{
+                          selectedDetailFile1
+                            ? "Change Image"
+                            : "Choose Image File"
+                        }}</span>
+                      </button>
+
+                      @if (selectedDetailFile1 && !uploadingDetailImage1) {
+                      <button
+                        mat-raised-button
+                        type="button"
+                        (click)="uploadDetailImage1()"
+                        color="accent"
+                      >
+                        <mat-icon>check_circle</mat-icon>
+                        <span class="ml-2">Upload</span>
+                      </button>
+                      } @if (uploadingDetailImage1) {
+                      <div class="flex items-center gap-2">
+                        <mat-spinner diameter="24"></mat-spinner>
+                        <span class="text-sm text-gray-600">Uploading...</span>
+                      </div>
+                      }
+                    </div>
+
+                    @if (detailImage1Preview) {
+                    <div class="mt-4">
+                      <p class="text-sm text-gray-600 mb-2">Preview:</p>
+                      <img
+                        [src]="getImageUrl(detailImage1Preview)"
+                        alt="Preview"
+                        class="max-h-48 rounded-lg border-2 border-gray-300 shadow-sm"
+                      />
+                    </div>
+                    } @else if (productForm.get('detailImage1Url')?.value &&
+                    !selectedDetailFile1) {
+                    <div class="mt-4">
+                      <p class="text-sm text-gray-600 mb-2">Current Image:</p>
+                      <img
+                        [src]="
+                          getImageUrl(productForm.get('detailImage1Url')?.value)
+                        "
+                        alt="Current"
+                        class="max-h-48 rounded-lg border-2 border-gray-300 shadow-sm"
+                        onerror="this.style.display='none'"
+                      />
+                    </div>
+                    }
+                  </div>
+                </div>
+
+                <!-- Detail Image 2 Upload Section -->
+                <div class="mt-6 pt-6 border-t border-gray-300">
+                  <label class="block text-sm font-medium text-gray-700 mb-3"
+                    >Detail Image 2</label
+                  >
+
+                  <input
+                    type="file"
+                    id="detailImage2FileInput"
+                    accept="image/*"
+                    (change)="onDetailFile2Selected($event)"
+                    class="hidden"
+                  />
+
+                  <div class="space-y-4">
+                    <div class="flex gap-3 items-center">
+                      <button
+                        mat-raised-button
+                        type="button"
+                        (click)="selectDetailImage2File()"
+                        [disabled]="uploadingDetailImage2"
+                        color="primary"
+                      >
+                        <mat-icon>cloud_upload</mat-icon>
+                        <span class="ml-2">{{
+                          selectedDetailFile2
+                            ? "Change Image"
+                            : "Choose Image File"
+                        }}</span>
+                      </button>
+
+                      @if (selectedDetailFile2 && !uploadingDetailImage2) {
+                      <button
+                        mat-raised-button
+                        type="button"
+                        (click)="uploadDetailImage2()"
+                        color="accent"
+                      >
+                        <mat-icon>check_circle</mat-icon>
+                        <span class="ml-2">Upload</span>
+                      </button>
+                      } @if (uploadingDetailImage2) {
+                      <div class="flex items-center gap-2">
+                        <mat-spinner diameter="24"></mat-spinner>
+                        <span class="text-sm text-gray-600">Uploading...</span>
+                      </div>
+                      }
+                    </div>
+
+                    @if (detailImage2Preview) {
+                    <div class="mt-4">
+                      <p class="text-sm text-gray-600 mb-2">Preview:</p>
+                      <img
+                        [src]="getImageUrl(detailImage2Preview)"
+                        alt="Preview"
+                        class="max-h-48 rounded-lg border-2 border-gray-300 shadow-sm"
+                      />
+                    </div>
+                    } @else if (productForm.get('detailImage2Url')?.value &&
+                    !selectedDetailFile2) {
+                    <div class="mt-4">
+                      <p class="text-sm text-gray-600 mb-2">Current Image:</p>
+                      <img
+                        [src]="
+                          getImageUrl(productForm.get('detailImage2Url')?.value)
+                        "
+                        alt="Current"
+                        class="max-h-48 rounded-lg border-2 border-gray-300 shadow-sm"
+                        onerror="this.style.display='none'"
+                      />
+                    </div>
+                    }
+                  </div>
+                </div>
 
                 <!-- Manual URL Input -->
                 <mat-form-field appearance="outline" class="w-full">
@@ -365,8 +573,41 @@
       }
 
       <div class="p-4">
+        <!-- Bulk Actions -->
+        @if (selectedProducts.size > 0) {
+        <div
+          class="mb-4 p-3 bg-black text-white rounded-lg flex items-center justify-between"
+        >
+          <span>{{ selectedProducts.size }} product(s) selected</span>
+          <button
+            mat-raised-button
+            color="warn"
+            (click)="deleteSelectedProducts()"
+          >
+            <mat-icon>delete</mat-icon>
+            <span class="ml-2">Delete Selected</span>
+          </button>
+        </div>
+        }
+
         <div class="mat-elevation-z8">
           <table mat-table [dataSource]="productDataSource" class="bg-white">
+            <ng-container matColumnDef="select">
+              <th mat-header-cell *matHeaderCellDef>
+                <mat-checkbox
+                  [checked]="isAllSelected()"
+                  [indeterminate]="isIndeterminate()"
+                  (change)="toggleSelectAll()"
+                ></mat-checkbox>
+              </th>
+              <td mat-cell *matCellDef="let product">
+                <mat-checkbox
+                  [checked]="isProductSelected(product.id)"
+                  (change)="toggleProductSelection(product.id)"
+                ></mat-checkbox>
+              </td>
+            </ng-container>
+
             <ng-container matColumnDef="id">
               <th mat-header-cell *matHeaderCellDef>ID</th>
               <td mat-cell *matCellDef="let product">{{ product.id }}</td>
@@ -378,12 +619,12 @@
             </ng-container>
 
             <ng-container matColumnDef="brand">
-              <th mat-header-cell *matHeaderCellDef>Brand</th>
+              <th mat-header-cell *matHeaderCellDef>Surface</th>
               <td mat-cell *matCellDef="let product">{{ product.brand }}</td>
             </ng-container>
 
             <ng-container matColumnDef="type">
-              <th mat-header-cell *matHeaderCellDef>Type</th>
+              <th mat-header-cell *matHeaderCellDef>Media</th>
               <td mat-cell *matCellDef="let product">{{ product.type }}</td>
             </ng-container>
 
@@ -436,6 +677,352 @@
             showFirstLastButtons
           >
           </mat-paginator>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab label="Archive">
+      <div
+        class="flex justify-between items-center mt-2 max-w-screen-2xl mx-auto p-4"
+      >
+        <h2 class="text-2xl font-semibold">Archive Gallery</h2>
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="openAddArchiveForm()"
+        >
+          <mat-icon>add</mat-icon>
+          Add Image
+        </button>
+      </div>
+
+      @if (showArchiveForm) {
+      <div class="max-w-4xl mx-auto p-6">
+        <div class="bg-white p-8 rounded-lg shadow-lg border border-black">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-2xl font-bold text-black">
+              {{
+                editingArchiveImage ? "Edit Archive Image" : "Add Archive Image"
+              }}
+            </h3>
+            <button mat-icon-button (click)="cancelArchiveForm()" type="button">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+
+          <form
+            [formGroup]="archiveForm"
+            (ngSubmit)="saveArchiveImage()"
+            class="space-y-6"
+          >
+            <!-- Title -->
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Title *</mat-label>
+              <input
+                matInput
+                formControlName="title"
+                placeholder="Enter image title"
+              />
+              <mat-icon matPrefix>title</mat-icon>
+              @if (archiveForm.get('title')?.hasError('required') &&
+              archiveForm.get('title')?.touched) {
+              <mat-error>Title is required</mat-error>
+              }
+            </mat-form-field>
+
+            <!-- Image Upload Section -->
+            <div class="border border-black rounded-lg p-4 bg-white">
+              <label class="block text-sm font-medium text-black mb-3"
+                >Image *</label
+              >
+
+              <input
+                type="file"
+                id="archiveImageFileInput"
+                accept="image/*"
+                (change)="onArchiveFileSelected($event)"
+                class="hidden"
+              />
+
+              <div class="space-y-4">
+                <div class="flex gap-3 items-center">
+                  <button
+                    mat-raised-button
+                    type="button"
+                    (click)="selectArchiveImageFile()"
+                    [disabled]="uploadingArchiveImage"
+                    color="primary"
+                  >
+                    <mat-icon>cloud_upload</mat-icon>
+                    <span class="ml-2">{{
+                      selectedArchiveFile ? "Change Image" : "Choose Image File"
+                    }}</span>
+                  </button>
+
+                  @if (selectedArchiveFile && !uploadingArchiveImage) {
+                  <button
+                    mat-raised-button
+                    type="button"
+                    (click)="uploadArchiveImage()"
+                    color="accent"
+                  >
+                    <mat-icon>check_circle</mat-icon>
+                    <span class="ml-2">Upload</span>
+                  </button>
+                  <button
+                    mat-stroked-button
+                    type="button"
+                    (click)="clearArchiveImageSelection()"
+                  >
+                    <mat-icon>cancel</mat-icon>
+                    <span class="ml-2">Cancel</span>
+                  </button>
+                  } @if (uploadingArchiveImage) {
+                  <div class="flex items-center gap-2">
+                    <mat-spinner diameter="24"></mat-spinner>
+                    <span class="text-sm text-black">Uploading...</span>
+                  </div>
+                  }
+                </div>
+
+                <!-- Image Preview with Position Adjustment -->
+                @if (archiveImagePreview || archiveForm.get('imageUrl')?.value)
+                {
+                <div class="mt-4">
+                  <p class="text-sm text-black mb-2">
+                    Preview (drag image to adjust position):
+                  </p>
+                  <div
+                    class="image-position-container relative border-2 border-black rounded-lg overflow-hidden cursor-move"
+                    style="width: 100%; aspect-ratio: 16/9; background: #f5f5f5"
+                    (mousedown)="onImageDragStart($event)"
+                  >
+                    <img
+                      [src]="
+                        archiveImagePreview ||
+                        getImageUrl(archiveForm.get('imageUrl')?.value)
+                      "
+                      alt="Preview"
+                      class="w-full h-full object-cover select-none pointer-events-none"
+                      [style.object-position]="
+                        (archiveForm.get('objectPositionX')?.value ?? 50) +
+                        '% ' +
+                        (archiveForm.get('objectPositionY')?.value ?? 50) +
+                        '%'
+                      "
+                      draggable="false"
+                    />
+                  </div>
+
+                  <!-- Image Position Controls -->
+                  <div class="mt-4 space-y-4">
+                    <p class="text-sm font-medium text-black mb-3">
+                      Adjust Image Position:
+                    </p>
+
+                    <div class="space-y-3">
+                      <div>
+                        <label class="text-xs text-black mb-1 block">
+                          Horizontal Position:
+                          {{ archiveForm.get("objectPositionX")?.value }}%
+                        </label>
+                        <input
+                          type="range"
+                          [value]="
+                            archiveForm.get('objectPositionX')?.value || 50
+                          "
+                          (input)="onPositionXChange($event)"
+                          min="0"
+                          max="100"
+                          step="1"
+                          class="position-slider w-full"
+                        />
+                      </div>
+
+                      <div>
+                        <label class="text-xs text-black mb-1 block">
+                          Vertical Position:
+                          {{ archiveForm.get("objectPositionY")?.value }}%
+                        </label>
+                        <input
+                          type="range"
+                          [value]="
+                            archiveForm.get('objectPositionY')?.value || 50
+                          "
+                          (input)="onPositionYChange($event)"
+                          min="0"
+                          max="100"
+                          step="1"
+                          class="position-slider w-full"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="flex gap-2 mt-2">
+                      <button
+                        mat-stroked-button
+                        type="button"
+                        (click)="
+                          archiveForm.patchValue({
+                            objectPositionX: 50,
+                            objectPositionY: 50
+                          })
+                        "
+                        class="text-xs"
+                      >
+                        Reset to Center
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                }
+
+                <!-- Manual URL Input -->
+                <mat-form-field appearance="outline" class="w-full">
+                  <mat-label>Or enter image URL manually</mat-label>
+                  <input
+                    matInput
+                    formControlName="imageUrl"
+                    placeholder="/images/archive/image.png"
+                  />
+                  <mat-icon matPrefix>link</mat-icon>
+                  @if (archiveForm.get('imageUrl')?.hasError('required') &&
+                  archiveForm.get('imageUrl')?.touched) {
+                  <mat-error>Image URL is required</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+            </div>
+
+            <!-- Description -->
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Description</mat-label>
+              <textarea
+                matInput
+                formControlName="description"
+                rows="5"
+                placeholder="Enter image description"
+              ></textarea>
+              <mat-icon matPrefix>description</mat-icon>
+            </mat-form-field>
+
+            <!-- Display Order and Main Image -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Display Order *</mat-label>
+                <input
+                  matInput
+                  type="number"
+                  formControlName="displayOrder"
+                  placeholder="0"
+                  min="0"
+                />
+                <mat-icon matPrefix>sort</mat-icon>
+                @if (archiveForm.get('displayOrder')?.hasError('required') &&
+                archiveForm.get('displayOrder')?.touched) {
+                <mat-error>Display order is required</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Main Image</mat-label>
+                <mat-select formControlName="isMainImage">
+                  <mat-option [value]="false">No</mat-option>
+                  <mat-option [value]="true">Yes</mat-option>
+                </mat-select>
+                <mat-icon matPrefix>star</mat-icon>
+              </mat-form-field>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex gap-3 justify-end pt-4 border-t border-black">
+              <button
+                mat-stroked-button
+                type="button"
+                (click)="cancelArchiveForm()"
+              >
+                Cancel
+              </button>
+              <button
+                mat-raised-button
+                color="primary"
+                type="submit"
+                [disabled]="archiveForm.invalid || uploadingArchiveImage"
+              >
+                <mat-icon>{{
+                  editingArchiveImage ? "save" : "add_circle"
+                }}</mat-icon>
+                <span class="ml-2">{{
+                  editingArchiveImage ? "Update Image" : "Create Image"
+                }}</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+      }
+
+      <!-- Archive Images List -->
+      <div class="p-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          @for (image of archiveImages; track image.id) {
+          <div class="border border-black rounded-lg p-4 bg-white">
+            <div
+              class="relative mb-4 overflow-hidden rounded-lg"
+              style="aspect-ratio: 16/9"
+            >
+              <img
+                [src]="getImageUrl(image.imageUrl)"
+                [alt]="image.title"
+                class="w-full h-full object-cover"
+                [style.object-position]="
+                  (image.objectPositionX ?? 50) +
+                  '% ' +
+                  (image.objectPositionY ?? 50) +
+                  '%'
+                "
+              />
+              @if (image.isMainImage) {
+              <span
+                class="absolute top-2 right-2 bg-black text-white px-2 py-1 text-xs font-bold"
+                >MAIN</span
+              >
+              }
+            </div>
+            <h3 class="font-bold text-black mb-2">{{ image.title }}</h3>
+            <p class="text-sm text-black mb-2">
+              Order: {{ image.displayOrder }}
+            </p>
+            @if (image.description) {
+            <p class="text-sm text-black mb-4 line-clamp-2">
+              {{ image.description }}
+            </p>
+            }
+            <div class="flex gap-2">
+              <button
+                mat-stroked-button
+                (click)="openEditArchiveForm(image)"
+                class="flex-1"
+              >
+                <mat-icon>edit</mat-icon>
+                Edit
+              </button>
+              <button
+                mat-stroked-button
+                (click)="deleteArchiveImage(image.id)"
+                class="flex-1"
+              >
+                <mat-icon>delete</mat-icon>
+                Delete
+              </button>
+            </div>
+          </div>
+          } @if (archiveImages.length === 0) {
+          <div class="col-span-full text-center py-8">
+            <p class="text-black">
+              No archive images yet. Add your first image to get started.
+            </p>
+          </div>
+          }
         </div>
       </div>
     </mat-tab>

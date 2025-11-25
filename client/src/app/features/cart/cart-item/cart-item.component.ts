@@ -5,6 +5,7 @@ import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { CurrencyPipe } from '@angular/common';
 import { CartService } from '../../../core/services/cart.service';
+import { getImageUrl } from '../../../shared/utils/image-url.util';
 
 @Component({
   selector: 'app-cart-item',
@@ -21,6 +22,7 @@ import { CartService } from '../../../core/services/cart.service';
 export class CartItemComponent {
   item = input.required<CartItem>();
   cartService = inject(CartService);
+  getImageUrl = getImageUrl;
 
   incrementQuantity() {
     this.cartService.addItemToCart(this.item());

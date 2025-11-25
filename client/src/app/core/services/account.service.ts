@@ -14,8 +14,29 @@ export class AccountService {
   private signalrService = inject(SignalrService);
   currentUser = signal<User | null>(null);
   isAdmin = computed(() => {
-    const roles = this.currentUser()?.roles;
-    return Array.isArray(roles) ? roles.includes('Admin') : roles === 'Admin';
+    const user = this.currentUser();
+    if (!user) {
+      console.log('isAdmin check: No user');
+      return false;
+    }
+    
+    const roles = user.roles;
+    let result = false;
+    
+    if (Array.isArray(roles)) {
+      result = roles.includes('Admin') || roles.some(r => r?.toLowerCase() === 'admin');
+    } else if (typeof roles === 'string') {
+      result = roles === 'Admin' || roles.toLowerCase() === 'admin';
+    }
+    
+    console.log('isAdmin check:', { 
+      roles, 
+      result, 
+      userEmail: user.email,
+      rolesType: typeof roles,
+      isArray: Array.isArray(roles)
+    });
+    return result;
   });
 
   login(values: any) {
@@ -43,8 +64,11 @@ export class AccountService {
   }
 
   getUserInfo() {
-    return this.http.get<User>(this.baseUrl + 'account/user-info').pipe(
+    return this.http.get<User>(this.baseUrl + 'account/user-info', {
+      withCredentials: true
+    }).pipe(
       map(user => {
+        console.log('User info loaded:', user);
         this.currentUser.set(user);
         return user;
       })

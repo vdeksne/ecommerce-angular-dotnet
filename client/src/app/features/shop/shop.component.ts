@@ -4,9 +4,8 @@ import { Product } from '../../shared/models/product';
 import { ProductItemComponent } from "./product-item/product-item.component";
 import { MatDialog } from '@angular/material/dialog';
 import { FiltersDialogComponent } from './filters-dialog/filters-dialog.component';
-import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
+import { MatMenu } from '@angular/material/menu';
 import { MatListOption, MatSelectionList, MatSelectionListChange } from '@angular/material/list';
 import { ShopParams } from '../../shared/models/shopParams';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
@@ -19,12 +18,10 @@ import { EmptyStateComponent } from "../../shared/components/empty-state/empty-s
   standalone: true,
   imports: [
     ProductItemComponent,
-    MatButton,
     MatIcon,
     MatMenu,
     MatSelectionList,
     MatListOption,
-    MatMenuTrigger,
     MatPaginator,
     FormsModule,
     EmptyStateComponent

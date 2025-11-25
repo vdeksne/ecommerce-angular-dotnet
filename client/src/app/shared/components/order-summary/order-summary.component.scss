@@ -1,0 +1,201 @@
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.max-w-4xl {
+  max-width: 56rem;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.space-y-6 > * + * {
+  margin-top: 1.5rem;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.space-y-4 > * + * {
+  margin-top: 1rem;
+}
+
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.border {
+  border-width: 1px;
+  border-color: black;
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+.bg-white {
+  background-color: white;
+}
+
+.shadow-sm {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.text-xl {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.space-y-2 > * + * {
+  margin-top: 0.5rem;
+}
+
+.flex {
+  display: flex;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+// All text colors are black by default
+
+.border-t {
+  border-top-width: 1px;
+  border-top-color: black;
+}
+
+.border {
+  border-color: black;
+}
+
+.pt-2 {
+  padding-top: 0.5rem;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.gap-2 {
+  gap: 0.5rem;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.block {
+  display: block;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.font-mediem {
+  font-weight: 500;
+}
+
+.p-2 {
+  padding: 0.5rem;
+}
+
+// Override Material styles for black and white theme
+::ng-deep {
+  .mat-mdc-flat-button {
+    --mdc-filled-button-container-color: black !important;
+    --mdc-filled-button-label-text-color: white !important;
+    background-color: black !important;
+    color: white !important;
+
+    &:hover:not(:disabled) {
+      --mdc-filled-button-hover-state-layer-color: rgba(
+        255,
+        255,
+        255,
+        0.1
+      ) !important;
+      background-color: black !important;
+    }
+
+    &:focus:not(:disabled) {
+      --mdc-filled-button-focus-state-layer-color: rgba(
+        255,
+        255,
+        255,
+        0.1
+      ) !important;
+    }
+  }
+
+  .mat-mdc-button {
+    --mdc-text-button-label-text-color: black !important;
+    --mat-text-button-state-layer-color: transparent !important;
+    color: black !important;
+    border: 1px solid black !important;
+    background: transparent !important;
+
+    &:hover:not(:disabled) {
+      --mdc-text-button-hover-state-layer-color: black !important;
+      --mdc-text-button-hover-label-text-color: white !important;
+      background-color: black !important;
+      color: white !important;
+    }
+
+    &:focus:not(:disabled) {
+      --mdc-text-button-focus-state-layer-color: black !important;
+    }
+  }
+
+  .mat-mdc-icon-button {
+    --mdc-icon-button-icon-color: black !important;
+    --mdc-icon-button-state-layer-color: transparent !important;
+    color: black !important;
+
+    &:hover:not(:disabled) {
+      --mdc-icon-button-hover-state-layer-color: black !important;
+      --mdc-icon-button-hover-icon-color: white !important;
+      background-color: black !important;
+      color: white !important;
+    }
+
+    &:focus:not(:disabled) {
+      --mdc-icon-button-focus-state-layer-color: black !important;
+    }
+  }
+
+  .mat-mdc-form-field {
+    .mat-mdc-text-field-wrapper {
+      border: 1px solid black;
+    }
+
+    .mat-mdc-form-field-input-control input {
+      color: black;
+    }
+
+    .mat-mdc-form-field-label {
+      color: black;
+    }
+  }
+}

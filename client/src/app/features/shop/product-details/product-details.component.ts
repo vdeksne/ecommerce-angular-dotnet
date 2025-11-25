@@ -4,28 +4,16 @@ import { ActivatedRoute } from '@angular/router';
 import { Product } from '../../../shared/models/product';
 import { CurrencyPipe } from '@angular/common';
 import { MatButton } from '@angular/material/button';
-import { MatIcon } from '@angular/material/icon';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
-import { MatInput } from '@angular/material/input';
-import { MatDivider } from '@angular/material/divider';
 import { CartService } from '../../../core/services/cart.service';
 import { FormsModule } from '@angular/forms';
+import { getImageUrl } from '../../../shared/utils/image-url.util';
 
 @Component({
   selector: 'app-product-details',
   standalone: true,
-  imports: [
-    CurrencyPipe,
-    MatButton,
-    MatIcon,
-    MatFormField,
-    MatInput,
-    MatLabel,
-    MatDivider,
-    FormsModule
-  ],
+  imports: [CurrencyPipe, MatButton, FormsModule],
   templateUrl: './product-details.component.html',
-  styleUrl: './product-details.component.scss'
+  styleUrl: './product-details.component.scss',
 })
 export class ProductDetailsComponent implements OnInit {
   private shopService = inject(ShopService);
@@ -43,12 +31,12 @@ export class ProductDetailsComponent implements OnInit {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     if (!id) return;
     this.shopService.getProduct(+id).subscribe({
-      next: product => {
+      next: (product) => {
         this.product = product;
         this.updateQuantityInCart();
       },
-      error: error => console.log(error)
-    })
+      error: (error) => console.log(error),
+    });
   }
 
   updateCart() {
@@ -65,12 +53,103 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   updateQuantityInCart() {
-    this.quantityInCart = this.cartService.cart()?.items
-      .find(x => x.productId === this.product?.id)?.quantity || 0;
+    this.quantityInCart =
+      this.cartService
+        .cart()
+        ?.items.find((x) => x.productId === this.product?.id)?.quantity || 0;
     this.quantity = this.quantityInCart || 1;
   }
 
   getButtonText() {
-    return this.quantityInCart > 0 ? 'Update cart' : 'Add to cart'
+    return this.quantityInCart > 0 ? 'Update cart' : 'Add to cart';
   }
+
+  inquireToAcquire() {
+    if (!this.product) return;
+    this.cartService.addItemToCart(this.product);
+    this.updateQuantityInCart();
+  }
+
+  getProductSize(): string {
+    if (!this.product?.description) return '';
+
+    // Try to find size in cm format first
+    const sizeMatchCm = this.product.description.match(
+      /Size:\s*(\d+(?:\.\d+)?)\s*cm\s*x\s*(\d+(?:\.\d+)?)\s*cm/i
+    );
+    if (sizeMatchCm) {
+      return `${sizeMatchCm[1]} cm x ${sizeMatchCm[2]} cm`;
+    }
+
+    // Try to find size in cm format without "Size:" prefix
+    const sizeMatchCm2 = this.product.description.match(
+      /(\d+(?:\.\d+)?)\s*cm\s*x\s*(\d+(?:\.\d+)?)\s*cm/i
+    );
+    if (sizeMatchCm2) {
+      return `${sizeMatchCm2[1]} cm x ${sizeMatchCm2[2]} cm`;
+    }
+
+    // Try to find size in inches format (for backward compatibility)
+    const sizeMatchInches = this.product.description.match(
+      /Size:\s*(\d+(?:\.\d+)?)"\s*x\s*(\d+(?:\.\d+)?)"/i
+    );
+    if (sizeMatchInches) {
+      // Convert to cm
+      const widthCm = (parseFloat(sizeMatchInches[1]) * 2.54).toFixed(1);
+      const heightCm = (parseFloat(sizeMatchInches[2]) * 2.54).toFixed(1);
+      return `${widthCm} cm x ${heightCm} cm`;
+    }
+
+    // Try to find size in inches format without "Size:" prefix
+    const sizeMatchInches2 = this.product.description.match(
+      /(\d+(?:\.\d+)?)"\s*x\s*(\d+(?:\.\d+)?)"/i
+    );
+    if (sizeMatchInches2) {
+      // Convert to cm
+      const widthCm = (parseFloat(sizeMatchInches2[1]) * 2.54).toFixed(1);
+      const heightCm = (parseFloat(sizeMatchInches2[2]) * 2.54).toFixed(1);
+      return `${widthCm} cm x ${heightCm} cm`;
+    }
+
+    return '';
+  }
+
+  getSubtitle(): string {
+    if (!this.product) return '';
+    const size = this.getProductSize();
+    const parts = [this.product.brand, this.product.type];
+    if (size) {
+      parts.push(size);
+    }
+    return `${parts.join(', ')}*`;
+  }
+
+  getFormattedDescription(): string[] {
+    if (!this.product?.description) return [];
+
+    // Remove size information from description (it's shown separately in subtitle)
+    let description = this.product.description
+      .replace(/Size:\s*\d+(?:\.\d+)?\s*cm\s*x\s*\d+(?:\.\d+)?\s*cm/gi, '')
+      .replace(/Size:\s*\d+(?:\.\d+)?"\s*x\s*\d+(?:\.\d+)?"/gi, '')
+      .replace(/\d+(?:\.\d+)?\s*cm\s*x\s*\d+(?:\.\d+)?\s*cm/gi, '')
+      .replace(/\d+(?:\.\d+)?"\s*x\s*\d+(?:\.\d+)?"/gi, '')
+      .trim();
+
+    // Split by double newlines to preserve paragraph structure
+    const paragraphs = description
+      .split(/\n\n+/)
+      .filter((p) => p.trim().length > 0);
+
+    return paragraphs;
+  }
+
+  getDescriptionWithSize(): string {
+    const size = this.getProductSize();
+    if (size) {
+      return `this piece measures ${size}, referring to the overall framed work.`;
+    }
+    return `this piece measures XX x XX cm, referring to the overall framed work.`;
+  }
+
+  getImageUrl = getImageUrl;
 }

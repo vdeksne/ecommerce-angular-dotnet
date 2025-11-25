@@ -1,0 +1,110 @@
+[
+  {
+    "ImageUrl": "/images/archive/placeholder.png",
+    "Title": "Arctic Ocean Scene with Whale and Origami Boat",
+    "Description": "A dramatic arctic or oceanic scene featuring a large blue whale diving into dark, icy waters. Below, turbulent seas with jagged ice floes. In the center, a pair of human hands hold a delicate origami boat, creating a contrast between vast nature and human creation.",
+    "DisplayOrder": 1,
+    "IsMainImage": true,
+    "ObjectPositionX": 50,
+    "ObjectPositionY": 50
+  },
+  {
+    "ImageUrl": "/images/archive/placeholder.png",
+    "Title": "Winter Scene with Animals and Children",
+    "Description": "A serene winter scene with a yellow-breasted bird perched on a bare branch, a large white rabbit in the snow, and three children bundled in winter clothing walking through the snow with a sled.",
+    "DisplayOrder": 2,
+    "IsMainImage": false,
+    "ObjectPositionX": 50,
+    "ObjectPositionY": 50
+  },
+  {
+    "ImageUrl": "/images/archive/placeholder.png",
+    "Title": "Fantasy Urban Landscape with Eiffel Tower",
+    "Description": "A fantasy or surreal urban landscape featuring the Eiffel Tower partially obscured by swirling purple and pink clouds. A figure with large dark purple wings descends from the clouds above a stylized futuristic cityscape.",
+    "DisplayOrder": 3,
+    "IsMainImage": false,
+    "ObjectPositionX": 50,
+    "ObjectPositionY": 50
+  },
+  {
+    "ImageUrl": "/images/archive/placeholder.png",
+    "Title": "Flamingo Landscape Studies",
+    "Description": "A detailed pencil sketch and vibrant colored painting of a dense tropical landscape with numerous flamingos. The top section features a monochromatic pencil sketch, while the middle section shows a vibrant colored painting of a similar scene with flamingos by water.",
+    "DisplayOrder": 4,
+    "IsMainImage": false,
+    "ObjectPositionX": 50,
+    "ObjectPositionY": 50
+  },
+  {
+    "ImageUrl": "/images/archive/placeholder.png",
+    "Title": "White Lily Botanical Illustration",
+    "Description": "A detailed botanical illustration of a white lily plant featuring two fully open blossoms and one prominent green bud, growing on a green stem with several dark green leaves. Realistic style resembling traditional botanical painting.",
+    "DisplayOrder": 5,
+    "IsMainImage": false,
+    "ObjectPositionX": 50,
+    "ObjectPositionY": 50
+  },
+  {
+    "ImageUrl": "/images/archive/placeholder.png",
+    "Title": "Hand Reaching to Glowing Figure",
+    "Description": "A painting depicting a large, pale hand reaching down towards a smaller, glowing, reclining human figure, all set against a dark, star-filled background. The hand appears almost divine, while the figure glows with golden-yellow light. Signed 'VIKTORIJA 09/2012'.",
+    "DisplayOrder": 6,
+    "IsMainImage": false,
+    "ObjectPositionX": 50,
+    "ObjectPositionY": 50
+  },
+  {
+    "ImageUrl": "/images/archive/placeholder.png",
+    "Title": "Ballet Dancers in Rehearsal Studio",
+    "Description": "An oil painting in impressionistic style depicting a bustling scene of ballet dancers in a rehearsal studio. Multiple female figures in white tutus are captured in various states of activity, with visible brushstrokes emphasizing movement and atmosphere. Signed 'CA 2013'.",
+    "DisplayOrder": 7,
+    "IsMainImage": false,
+    "ObjectPositionX": 50,
+    "ObjectPositionY": 50
+  },
+  {
+    "ImageUrl": "/images/archive/placeholder.png",
+    "Title": "Portrait of a Contemplative Man",
+    "Description": "A painted portrait of a middle-aged man with long flowing blond hair, rendered in an impressionistic style. The subject looks towards the upper right with a pensive expression, his left hand raised to his chin. The background features a two-toned blue and grey setting.",
+    "DisplayOrder": 8,
+    "IsMainImage": false,
+    "ObjectPositionX": 50,
+    "ObjectPositionY": 50
+  },
+  {
+    "ImageUrl": "/images/archive/placeholder.png",
+    "Title": "Serene Harbor with Sailboats",
+    "Description": "An oil painting depicting a serene harbor scene with several sailboats on calm water, backed by a distant shoreline with buildings and trees under an overcast sky. The style is impressionistic with loose, visible brushstrokes and a muted color palette of blues, greens, and greys.",
+    "DisplayOrder": 9,
+    "IsMainImage": false,
+    "ObjectPositionX": 50,
+    "ObjectPositionY": 50
+  },
+  {
+    "ImageUrl": "/images/archive/placeholder.png",
+    "Title": "Watercolor Lily with Splattered Background",
+    "Description": "A vibrant watercolor painting of a single large lily flower in shades of blue and purple with golden stamens, set against a dynamic background of pink and magenta watercolor washes accented with numerous dark red splatters.",
+    "DisplayOrder": 10,
+    "IsMainImage": false,
+    "ObjectPositionX": 50,
+    "ObjectPositionY": 50
+  },
+  {
+    "ImageUrl": "/images/archive/placeholder.png",
+    "Title": "Women Washing Clothes by the Water",
+    "Description": "An oil painting depicting a serene outdoor scene with several women engaged in washing clothes in a body of water. Eight women are distributed across the midground, standing or kneeling in the water. In the background, hazy mountains rise under a pale, overcast sky.",
+    "DisplayOrder": 11,
+    "IsMainImage": false,
+    "ObjectPositionX": 50,
+    "ObjectPositionY": 50
+  },
+  {
+    "ImageUrl": "/images/archive/placeholder.png",
+    "Title": "Crushed Cans Stippling Drawing",
+    "Description": "A black and white stippling (dot art) drawing depicting a still life of several crushed aluminum beverage cans. The artwork is rendered entirely using small black dots on a white background, with varying density creating shades of grey and black to define form, texture, and shadow.",
+    "DisplayOrder": 12,
+    "IsMainImage": false,
+    "ObjectPositionX": 50,
+    "ObjectPositionY": 50
+  }
+]

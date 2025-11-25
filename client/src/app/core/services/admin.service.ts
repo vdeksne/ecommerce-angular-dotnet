@@ -1,10 +1,12 @@
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { map } from 'rxjs/operators';
 import { OrderParams } from '../../shared/models/orderParams';
 import { Pagination } from '../../shared/models/pagination';
 import { Order } from '../../shared/models/order';
 import { Product } from '../../shared/models/product';
+import { ArchiveImage, CreateArchiveImageDto, UpdateArchiveImageDto } from '../../shared/models/archive-image';
 
 @Injectable({
   providedIn: 'root'
@@ -66,8 +68,103 @@ export class AdminService {
   uploadProductImage(file: File) {
     const formData = new FormData();
     formData.append('file', file);
-    return this.http.post<{url: string}>(this.baseUrl + 'upload/product-image', formData, {
-      reportProgress: false
+    return this.http.post(this.baseUrl + 'upload/product-image', formData, {
+      reportProgress: false,
+      withCredentials: true,
+      responseType: 'text'
+    }).pipe(
+      map((response: string) => {
+        // .NET returns JSON string (with quotes), so we need to parse it
+        let imageUrl: string;
+        try {
+          const parsed = JSON.parse(response);
+          imageUrl = typeof parsed === 'string' ? parsed : (parsed?.url || parsed);
+        } catch {
+          // If not JSON, it's already a string - remove quotes if present
+          const trimmed = response.trim();
+          if ((trimmed.startsWith('"') && trimmed.endsWith('"')) || 
+              (trimmed.startsWith("'") && trimmed.endsWith("'"))) {
+            imageUrl = trimmed.slice(1, -1);
+          } else {
+            imageUrl = response;
+          }
+        }
+        
+        // Convert relative path to absolute URL pointing to API server
+        if (imageUrl.startsWith('/images/')) {
+          const apiBaseUrl = this.baseUrl.replace('/api/', '');
+          return `${apiBaseUrl}${imageUrl}`;
+        }
+        
+        return imageUrl;
+      })
+    );
+  }
+
+  // Archive image management methods
+  getArchiveImages() {
+    return this.http.get<ArchiveImage[]>(this.baseUrl + 'archive', {
+      withCredentials: true
     });
+  }
+
+  getArchiveImage(id: number) {
+    return this.http.get<ArchiveImage>(this.baseUrl + 'archive/' + id, {
+      withCredentials: true
+    });
+  }
+
+  createArchiveImage(image: CreateArchiveImageDto) {
+    return this.http.post<ArchiveImage>(this.baseUrl + 'archive', image, {
+      withCredentials: true
+    });
+  }
+
+  updateArchiveImage(id: number, image: UpdateArchiveImageDto) {
+    return this.http.put<ArchiveImage>(this.baseUrl + 'archive/' + id, image, {
+      withCredentials: true
+    });
+  }
+
+  deleteArchiveImage(id: number) {
+    return this.http.delete(this.baseUrl + 'archive/' + id, {
+      withCredentials: true
+    });
+  }
+
+  uploadArchiveImage(file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post(this.baseUrl + 'upload/archive-image', formData, {
+      reportProgress: false,
+      withCredentials: true,
+      responseType: 'text'
+    }).pipe(
+      map((response: string) => {
+        // .NET returns JSON string (with quotes), so we need to parse it
+        let imageUrl: string;
+        try {
+          const parsed = JSON.parse(response);
+          imageUrl = typeof parsed === 'string' ? parsed : (parsed?.url || parsed);
+        } catch {
+          // If not JSON, it's already a string - remove quotes if present
+          const trimmed = response.trim();
+          if ((trimmed.startsWith('"') && trimmed.endsWith('"')) || 
+              (trimmed.startsWith("'") && trimmed.endsWith("'"))) {
+            imageUrl = trimmed.slice(1, -1);
+          } else {
+            imageUrl = response;
+          }
+        }
+        
+        // Convert relative path to absolute URL pointing to API server
+        if (imageUrl.startsWith('/images/')) {
+          const apiBaseUrl = this.baseUrl.replace('/api/', '');
+          return `${apiBaseUrl}${imageUrl}`;
+        }
+        
+        return imageUrl;
+      })
+    );
   }
 }

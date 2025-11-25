@@ -51,14 +51,18 @@ public class AccountController(SignInManager<AppUser> signInManager) : BaseApiCo
         if (User.Identity?.IsAuthenticated == false) return NoContent();
 
         var user = await signInManager.UserManager.GetUserByEmailWithAddress(User);
+        
+        // Get all roles for the user
+        var roles = await signInManager.UserManager.GetRolesAsync(user);
 
+        // Always return roles as an array for consistency
         return Ok(new
         {
             user.FirstName,
             user.LastName,
             user.Email,
             Address = user.Address?.ToDto(),
-            Roles = User.FindFirstValue(ClaimTypes.Role)
+            Roles = roles.ToArray() // Always return as array
         });
     }
 
@@ -105,4 +109,94 @@ public class AccountController(SignInManager<AppUser> signInManager) : BaseApiCo
 
         return BadRequest("Failed to update password");
     }
+
+    // Development-only endpoint to ensure admin user has Admin role
+    // WARNING: Remove this in production or add proper authentication
+    [HttpPost("ensure-admin-role")]
+    public async Task<ActionResult> EnsureAdminRole()
+    {
+        var adminUser = await signInManager.UserManager.FindByEmailAsync("admin@test.com");
+        
+        if (adminUser == null)
+        {
+            return NotFound("Admin user (admin@test.com) not found");
+        }
+
+        var isInAdminRole = await signInManager.UserManager.IsInRoleAsync(adminUser, "Admin");
+        
+        if (isInAdminRole)
+        {
+            return Ok(new { message = "Admin user already has Admin role", email = adminUser.Email });
+        }
+
+        var result = await signInManager.UserManager.AddToRoleAsync(adminUser, "Admin");
+        
+        if (result.Succeeded)
+        {
+            return Ok(new { message = "Admin role assigned to admin@test.com", email = adminUser.Email });
+        }
+
+        return BadRequest(new { errors = result.Errors });
+    }
+
+    // Simple endpoint to create a new admin user
+    // WARNING: Remove or secure this in production
+    [HttpPost("create-admin")]
+    public async Task<ActionResult> CreateAdminUser([FromBody] CreateAdminDto dto)
+    {
+        // Check if user already exists
+        var existingUser = await signInManager.UserManager.FindByEmailAsync(dto.Email);
+        if (existingUser != null)
+        {
+            // User exists, just assign admin role
+            var isInAdminRole = await signInManager.UserManager.IsInRoleAsync(existingUser, "Admin");
+            if (!isInAdminRole)
+            {
+                var roleResult = await signInManager.UserManager.AddToRoleAsync(existingUser, "Admin");
+                if (roleResult.Succeeded)
+                {
+                    return Ok(new { message = $"Admin role assigned to existing user {dto.Email}", email = dto.Email });
+                }
+                return BadRequest(new { errors = roleResult.Errors });
+            }
+            return Ok(new { message = $"User {dto.Email} already has Admin role", email = dto.Email });
+        }
+
+        // Create new user
+        var user = new AppUser
+        {
+            UserName = dto.Email,
+            Email = dto.Email,
+            FirstName = dto.FirstName ?? "",
+            LastName = dto.LastName ?? ""
+        };
+
+        var createResult = await signInManager.UserManager.CreateAsync(user, dto.Password);
+        
+        if (!createResult.Succeeded)
+        {
+            return BadRequest(new { errors = createResult.Errors });
+        }
+
+        // Assign Admin role
+        var addRoleResult = await signInManager.UserManager.AddToRoleAsync(user, "Admin");
+        
+        if (!addRoleResult.Succeeded)
+        {
+            return BadRequest(new { errors = addRoleResult.Errors });
+        }
+
+        return Ok(new { 
+            message = $"Admin user created successfully: {dto.Email}", 
+            email = dto.Email 
+        });
+    }
+}
+
+public class CreateAdminDto
+{
+    public required string Email { get; set; }
+    public required string Password { get; set; }
+    public string? FirstName { get; set; }
+    public string? LastName { get; set; }
 }

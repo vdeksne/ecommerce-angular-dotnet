@@ -1,6 +1,141 @@
 <div class="archive-page">
-  <div class="archive-container">
-    <h1 class="archive-title">Archive</h1>
-    <p class="archive-description">Browse through archived content and collections.</p>
+  <div class="archive-background">
+    <!-- Main Image -->
+    @if (selectedMainImage) {
+    <div class="main-image-container">
+      <img
+        [src]="getImageUrl(selectedMainImage.imageUrl)"
+        [alt]="selectedMainImage.title"
+        class="main-image"
+        [style.object-position]="(selectedMainImage.objectPositionX ?? 50) + '% ' + (selectedMainImage.objectPositionY ?? 50) + '%'"
+      />
+      @if (accountService.isAdmin()) {
+      <button
+        mat-icon-button
+        class="delete-button"
+        (click)="deleteImage(selectedMainImage!.id)"
+        title="Delete image"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
+      }
+    </div>
+    } @else {
+    <div class="main-image-container">
+      <div class="main-image-placeholder"></div>
+    </div>
+    }
+
+    <!-- Thumbnail Gallery -->
+    <div class="thumbnail-gallery">
+      @for (image of thumbnailImages; track image.id) {
+      <div
+        class="thumbnail-item"
+        (click)="selectMainImage(image)"
+        [class.selected]="selectedMainImage?.id === image.id"
+      >
+        <img
+          [src]="getImageUrl(image.imageUrl)"
+          [alt]="image.title"
+          class="thumbnail-image"
+          [style.object-position]="(image.objectPositionX ?? 50) + '% ' + (image.objectPositionY ?? 50) + '%'"
+        />
+        @if (accountService.isAdmin()) {
+        <button
+          mat-icon-button
+          class="delete-button-small"
+          (click)="deleteImage(image.id); $event.stopPropagation()"
+          title="Delete image"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+        }
+      </div>
+      } @if (mainImage) {
+      <div
+        class="thumbnail-item"
+        (click)="selectMainImage(mainImage)"
+        [class.selected]="selectedMainImage?.id === mainImage.id"
+      >
+        <img
+          [src]="getImageUrl(mainImage.imageUrl)"
+          [alt]="mainImage.title"
+          class="thumbnail-image"
+          [style.object-position]="(mainImage.objectPositionX || 50) + '% ' + (mainImage.objectPositionY || 50) + '%'"
+        />
+        @if (accountService.isAdmin()) {
+        <button
+          mat-icon-button
+          class="delete-button-small"
+          (click)="deleteImage(mainImage.id); $event.stopPropagation()"
+          title="Delete image"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+        }
+      </div>
+      } @if (thumbnailImages.length === 0 && !mainImage) { @for (item of
+      [1,2,3,4,5,6,7,8]; track item) {
+      <div class="thumbnail-item">
+        <div class="thumbnail-placeholder"></div>
+      </div>
+      } }
+    </div>
+
+    <!-- Text Content -->
+    <div class="archive-content">
+      @if (selectedMainImage) {
+      <h2 class="archive-title">{{ selectedMainImage.title }}</h2>
+      @if (selectedMainImage.description) {
+      <div class="archive-text">
+        <p
+          [innerHTML]="selectedMainImage.description.replace(/\n/g, '<br>')"
+        ></p>
+      </div>
+      } } @else {
+      <h2 class="archive-title">A Period of Juvenile Prosperity (2006-2009)</h2>
+      <div class="archive-text">
+        <p>
+          At the age of 17, Mike Brodie hopped his first train close to home in
+          Pensacola, Florida, thinking he would visit a friend in Mobile,
+          Alabama. Instead, the train took him in the opposite direction to
+          Jacksonville, Florida. Days later he rode the same train home,
+          arriving back where he started.
+        </p>
+        <p>&nbsp;</p>
+        <p>
+          Nonetheless, it sparked something in him and he began to wander across
+          America by any means that were free - walking, hitchhiking, and train
+          hopping. Shortly after his travels began he found a camera stuffed
+          behind a car seat and began to take pictures. Brodie spent years
+          crisscrossing the U.S., documenting his experiences, now appreciated
+          as one of the most impressive archives of American travel photography.
+        </p>
+        <p>&nbsp;</p>
+        <p>
+          A Period of Juvenile Prosperity was named the best exhibition of the
+          year by Vince Aletti in Artforum; and cited as one of the best photo
+          books of 2013 by The Guardian, The New York Times, The Telegraph, and
+          American Photo; it was short-listed for the Paris Photo/Aperture
+          Foundation First PhotoBook Award.
+        </p>
+      </div>
+      }
+    </div>
+
+    <!-- Admin Add Button -->
+    @if (accountService.isAdmin()) {
+    <div class="admin-actions">
+      <button
+        mat-raised-button
+        color="primary"
+        routerLink="/admin"
+        [queryParams]="{tab: 'archive'}"
+      >
+        <mat-icon>add</mat-icon>
+        Manage Archive Images
+      </button>
+    </div>
+    }
   </div>
 </div>

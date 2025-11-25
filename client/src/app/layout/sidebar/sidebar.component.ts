@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { MatButton } from '@angular/material/button';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { MatIcon } from '@angular/material/icon';
-import { IsAdminDirective } from '../../shared/directives/is-admin.directive';
 
 @Component({
   selector: 'app-sidebar',
@@ -18,7 +17,6 @@ import { IsAdminDirective } from '../../shared/directives/is-admin.directive';
     MatMenu,
     MatMenuItem,
     MatIcon,
-    IsAdminDirective,
   ],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',

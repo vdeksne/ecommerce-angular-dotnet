@@ -17,6 +17,7 @@ export type CartItem = {
     pictureUrl: string;
     brand: string;
     type: string;
+    quantityInStock: number;
 }
 
 export class Cart implements CartType {

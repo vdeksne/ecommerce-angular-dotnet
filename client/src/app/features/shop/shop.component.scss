@@ -1,0 +1,400 @@
+// Shop component styles - black and white only, Nunito Sans font
+:host {
+  display: block;
+  font-family: 'Nunito Sans', sans-serif;
+  color: black;
+}
+
+// Bottom controls section
+.bottom-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 3rem;
+  padding: 2rem 0;
+  border-top: 1px solid black;
+  
+  // Desktop: single row layout
+  @media (min-width: 1024px) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+}
+
+// Search form
+.search-form {
+  position: relative;
+  display: flex;
+  align-items: center;
+  max-width: 400px;
+  width: 100%;
+  margin: 0 auto;
+  
+  @media (min-width: 1024px) {
+    max-width: 300px;
+    margin: 0;
+    flex: 0 0 auto;
+  }
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem 3rem 0.75rem 1rem;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 14px;
+  color: black;
+  background: white;
+  border: 1px solid black;
+  border-radius: 0;
+  
+  &::placeholder {
+    color: #999;
+    font-weight: 300;
+  }
+  
+  &:focus {
+    outline: none;
+    border-color: black;
+  }
+}
+
+.search-button {
+  position: absolute;
+  right: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  background: transparent;
+  border: none;
+  color: black;
+  cursor: pointer;
+  
+  &:hover {
+    background: black;
+    color: white;
+  }
+  
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+// Controls row (Filters and Sort)
+.controls-row {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  
+  @media (min-width: 1024px) {
+    justify-content: flex-start;
+    flex: 0 0 auto;
+  }
+}
+
+.control-button {
+  padding: 0.5rem 1.5rem;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: black;
+  background: white;
+  border: 1px solid black;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  
+  // Remove any Material ripple effects
+  &::before,
+  &::after {
+    display: none !important;
+  }
+  
+  &:hover {
+    background: black;
+    color: white;
+  }
+  
+  &:focus {
+    outline: 2px solid black;
+    outline-offset: 2px;
+    background: white;
+    color: black;
+  }
+  
+  &:active {
+    background: black;
+    color: white;
+    transform: scale(0.98);
+  }
+  
+  // Override any Material injected styles
+  * {
+    color: inherit !important;
+  }
+}
+
+// Pagination wrapper
+.pagination-wrapper {
+  display: flex;
+  justify-content: center;
+  
+  @media (min-width: 1024px) {
+    justify-content: flex-end;
+    flex: 0 0 auto;
+    margin-left: auto;
+  }
+}
+
+// Override Material components to be black and white
+::ng-deep {
+  // Material button overrides - remove all purple/primary colors
+  .mat-mdc-button,
+  .mat-mdc-outlined-button,
+  .mat-mdc-stroked-button,
+  button.mat-mdc-button,
+  button.mat-mdc-outlined-button,
+  button.mat-mdc-stroked-button {
+    --mdc-outlined-button-label-text-color: black !important;
+    --mdc-outlined-button-outline-color: black !important;
+    --mdc-text-button-label-text-color: black !important;
+    color: black !important;
+    
+    .mdc-button__label {
+      color: black !important;
+    }
+    
+    &:hover {
+      --mdc-outlined-button-label-text-color: white !important;
+      --mdc-outlined-button-hover-label-text-color: white !important;
+      --mdc-outlined-button-hover-state-layer-color: black !important;
+      --mdc-text-button-hover-state-layer-color: black !important;
+      --mdc-text-button-hover-label-text-color: white !important;
+      color: white !important;
+      
+      .mdc-button__label {
+        color: white !important;
+      }
+    }
+    
+    &:focus {
+      --mdc-outlined-button-focus-label-text-color: black !important;
+      --mdc-outlined-button-focus-state-layer-color: black !important;
+      --mdc-text-button-focus-state-layer-color: black !important;
+      outline: 2px solid black !important;
+      outline-offset: 2px !important;
+    }
+    
+    &:active,
+    &:focus-visible {
+      --mdc-outlined-button-pressed-label-text-color: white !important;
+      --mdc-outlined-button-pressed-state-layer-color: black !important;
+      --mdc-text-button-pressed-state-layer-color: black !important;
+      color: white !important;
+      
+      .mdc-button__label {
+        color: white !important;
+      }
+    }
+    
+    .mdc-button__ripple {
+      &::before,
+      &::after {
+        background-color: black !important;
+      }
+    }
+    
+    .mat-mdc-button-persistent-ripple,
+    .mat-ripple-element {
+      background-color: black !important;
+      opacity: 0.1 !important;
+    }
+  }
+  
+  // Remove Material primary color theme globally
+  .mat-mdc-button-base {
+    --mdc-text-button-label-text-color: black !important;
+    --mat-text-button-state-layer-color: black !important;
+    
+    &:hover {
+      --mdc-text-button-hover-state-layer-color: black !important;
+      --mdc-text-button-hover-label-text-color: white !important;
+    }
+    
+    &:focus {
+      --mdc-text-button-focus-state-layer-color: black !important;
+    }
+    
+    &:active {
+      --mdc-text-button-pressed-state-layer-color: black !important;
+    }
+  }
+  
+  // Override Material menu trigger button
+  [matMenuTriggerFor] {
+    --mdc-text-button-label-text-color: black !important;
+    color: black !important;
+    
+    &:hover {
+      --mdc-text-button-hover-state-layer-color: black !important;
+      --mdc-text-button-hover-label-text-color: white !important;
+      color: white !important;
+    }
+    
+    &:focus,
+    &:focus-visible {
+      --mdc-text-button-focus-state-layer-color: black !important;
+      outline: 2px solid black !important;
+      outline-offset: 2px !important;
+    }
+  }
+  
+  // Paginator styling
+  .mat-mdc-paginator {
+    background: transparent !important;
+    color: black;
+    font-family: 'Nunito Sans', sans-serif;
+    
+    .mat-mdc-paginator-container {
+      padding: 0;
+      background: transparent;
+    }
+    
+    .mat-mdc-paginator-outer-container {
+      background: transparent;
+    }
+    
+    .mat-mdc-paginator-navigation-previous,
+    .mat-mdc-paginator-navigation-next,
+    .mat-mdc-paginator-navigation-first,
+    .mat-mdc-paginator-navigation-last {
+      color: black;
+      
+      &:hover {
+        background: black;
+        color: white;
+      }
+      
+      &:disabled {
+        color: #ccc;
+        opacity: 0.5;
+      }
+    }
+    
+    .mat-mdc-select-value {
+      color: black;
+      font-family: 'Nunito Sans', sans-serif;
+      font-size: 12px;
+    }
+    
+    .mat-mdc-paginator-page-size-label {
+      font-family: 'Nunito Sans', sans-serif;
+      font-size: 12px;
+      color: black;
+    }
+    
+    .mat-mdc-paginator-range-label {
+      font-family: 'Nunito Sans', sans-serif;
+      font-size: 12px;
+      color: black;
+      margin: 0 1rem;
+    }
+  }
+  
+  // Menu styling
+  .mat-mdc-menu-panel {
+    background: white;
+    border: 1px solid black;
+    border-radius: 0;
+    min-width: 150px;
+    
+    .mat-mdc-menu-item {
+      font-family: 'Nunito Sans', sans-serif;
+      font-size: 12px;
+      color: black;
+      padding: 0.75rem 1rem;
+      
+      // Remove Material primary color
+      --mdc-menu-item-label-text-color: black;
+      --mdc-menu-item-hover-state-layer-color: black;
+      --mdc-menu-item-focus-state-layer-color: black;
+      
+      .mat-icon {
+        color: black !important;
+      }
+      
+      &:hover {
+        background: black;
+        color: white;
+        
+        .mat-icon {
+          color: white !important;
+        }
+      }
+      
+      &:focus {
+        background: #f5f5f5;
+        color: black;
+      }
+      
+      // Remove ripple effects
+      .mat-ripple-element {
+        background-color: black !important;
+        opacity: 0.1 !important;
+      }
+    }
+  }
+  
+  // Selection list styling
+  .mat-mdc-selection-list {
+    padding: 0;
+    
+    .mat-mdc-list-option {
+      font-family: 'Nunito Sans', sans-serif;
+      font-size: 12px;
+      color: black;
+      
+      &:hover {
+        background: #f5f5f5;
+      }
+      
+      &.mdc-list-item--selected {
+        background: black;
+        color: white;
+      }
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .bottom-controls {
+    padding: 1.5rem 0;
+    gap: 1.25rem;
+  }
+  
+  .search-form {
+    max-width: 100%;
+  }
+  
+  .controls-row {
+    gap: 0.75rem;
+  }
+  
+  .control-button {
+    padding: 0.5rem 1rem;
+    font-size: 11px;
+  }
+}
+

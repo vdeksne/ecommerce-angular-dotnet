@@ -136,6 +136,9 @@ public class PaymentService : IPaymentService
             {
                 item.Price = productItem.Price;
             }
+            
+            // Update quantity in stock from product
+            item.QuantityInStock = productItem.QuantityInStock;
         }
     }
 

@@ -68,3 +68,23 @@ a {
   text-transform: uppercase;
   text-decoration: none;
 }
+
+// Progress bar styling - black only
+::ng-deep {
+  mat-progress-bar {
+    --mdc-linear-progress-active-indicator-color: black !important;
+    --mdc-linear-progress-track-color: #f0f0f0 !important;
+
+    .mdc-linear-progress__buffer {
+      background-color: #f0f0f0 !important;
+    }
+
+    .mdc-linear-progress__bar-inner {
+      background-color: black !important;
+    }
+
+    .mdc-linear-progress__bar {
+      background-color: black !important;
+    }
+  }
+}
