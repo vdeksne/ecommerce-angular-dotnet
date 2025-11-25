@@ -3,6 +3,26 @@
     <!-- Main Image -->
     @if (selectedMainImage) {
     <div class="main-image-container">
+      @if (canNavigate()) {
+      <button
+        mat-icon-button
+        class="nav-arrow nav-arrow-left"
+        (click)="previousImage()"
+        title="Previous image"
+        aria-label="Previous image"
+      >
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        class="nav-arrow nav-arrow-right"
+        (click)="nextImage()"
+        title="Next image"
+        aria-label="Next image"
+      >
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+      }
       <img
         [src]="getImageUrl(selectedMainImage.imageUrl)"
         [alt]="selectedMainImage.title"

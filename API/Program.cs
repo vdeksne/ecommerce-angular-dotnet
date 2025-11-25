@@ -39,7 +39,11 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(config =>
 builder.Services.AddSingleton<ICartService, CartService>();
 builder.Services.AddSingleton<IResponseCacheService, ResponseCacheService>();
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    // Allow anonymous access by default - individual endpoints can require auth
+    options.FallbackPolicy = null;
+});
 builder.Services.AddIdentityApiEndpoints<AppUser>(options =>
 {
     options.Password.RequireDigit = false;
@@ -53,6 +57,7 @@ builder.Services.AddIdentityApiEndpoints<AppUser>(options =>
 
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<ICouponService, CouponService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddSignalR();
 
 var app = builder.Build();
@@ -80,10 +85,11 @@ app.UseAuthorization();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-// Map Identity API endpoints first (they have specific routes like /api/login)
-app.MapGroup("api").MapIdentityApi<AppUser>(); // api/login
-// Then map custom controllers (they use /api/[controller] routes)
+// Map custom controllers first (they use /api/[controller] routes)
+// This ensures our controllers are mapped before identity endpoints
 app.MapControllers();
+// Map Identity API endpoints (they have specific routes like /api/login)
+app.MapGroup("api").MapIdentityApi<AppUser>(); // api/login
 app.MapHub<NotificationHub>("/hub/notifications");
 app.MapFallbackToController("Index", "Fallback");
 

@@ -11,21 +11,45 @@ using Stripe;
 
 namespace API.Controllers;
 
+[AllowAnonymous] // Allow anonymous access to all payment endpoints by default
 public class PaymentsController(IPaymentService paymentService, 
     IUnitOfWork unit, ILogger<PaymentsController> logger, 
     IConfiguration config, IHubContext<NotificationHub> hubContext) : BaseApiController
 {
     private readonly string _whSecret = config["StripeSettings:WhSecret"]!;
 
-    [Authorize]
     [HttpPost("{cartId}")]
     public async Task<ActionResult<ShoppingCart>> CreateOrUpdatePaymentIntent(string cartId)
     {
-        var cart = await paymentService.CreateOrUpdatePaymentIntent(cartId);
+        try
+        {
+            var cart = await paymentService.CreateOrUpdatePaymentIntent(cartId);
 
-        if (cart == null) return BadRequest("Problem with your cart");
+            if (cart == null) return BadRequest("Problem with your cart");
 
-        return Ok(cart);
+            return Ok(cart);
+        }
+        catch (StripeException ex)
+        {
+            // Final safety net - catch any Stripe exceptions that escape PaymentService
+            logger.LogWarning("Stripe exception caught in controller: {Message}", ex.Message);
+            
+            // Try to get cart anyway and return it (without payment intent)
+            try
+            {
+                var cart = await paymentService.CreateOrUpdatePaymentIntent(cartId);
+                return Ok(cart ?? new ShoppingCart { Id = cartId });
+            }
+            catch
+            {
+                return BadRequest("Problem with your cart");
+            }
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Unexpected error in CreateOrUpdatePaymentIntent");
+            return BadRequest("Problem with your cart");
+        }
     }
 
     [HttpGet("delivery-methods")]

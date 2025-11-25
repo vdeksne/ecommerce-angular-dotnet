@@ -1,0 +1,370 @@
+// Override Material Design components to use black and white theme
+::ng-deep {
+  // Stepper styles
+  .mat-step-header {
+    background-color: transparent !important;
+    
+    .mat-step-icon-selected {
+      background-color: black !important;
+      color: white !important;
+    }
+
+    .mat-step-icon-state-done {
+      background-color: black !important;
+      color: white !important;
+    }
+
+    .mat-step-icon-state-edit {
+      background-color: transparent !important;
+      border-color: black !important;
+      color: black !important;
+    }
+
+    .mat-step-label {
+      color: black !important;
+      font-family: 'Nunito Sans', sans-serif !important;
+    }
+
+    .mat-step-label-selected {
+      color: black !important;
+      font-weight: 500 !important;
+    }
+
+    .mat-step-icon {
+      border-color: black !important;
+    }
+
+    &:hover {
+      background-color: transparent !important;
+    }
+
+    &.cdk-keyboard-focused,
+    &.cdk-program-focused,
+    &.cdk-focused {
+      background-color: transparent !important;
+    }
+  }
+
+  .mat-step-header.cdk-keyboard-focused,
+  .mat-step-header.cdk-program-focused,
+  .mat-step-header.cdk-focused {
+    background-color: transparent !important;
+  }
+
+  .mat-step-header-ripple {
+    display: none !important;
+  }
+
+  .mat-step-header .mat-step-icon-container {
+    background-color: transparent !important;
+  }
+
+  .mat-stepper-horizontal-line {
+    border-top-color: black !important;
+  }
+
+  .mat-stepper-vertical-line {
+    border-left-color: black !important;
+  }
+
+  // Buttons - Black and white only
+  .mat-mdc-flat-button,
+  button[mat-flat-button] {
+    --mdc-filled-button-container-color: black !important;
+    --mdc-filled-button-label-text-color: white !important;
+    --mdc-filled-button-hover-state-layer-color: transparent !important;
+    --mdc-filled-button-focus-state-layer-color: transparent !important;
+    --mdc-filled-button-pressed-state-layer-color: transparent !important;
+    background-color: black !important;
+    color: white !important;
+    font-family: 'Nunito Sans', sans-serif !important;
+    border: none !important;
+
+    .mdc-button__ripple {
+      display: none !important;
+    }
+
+    .mat-mdc-button-persistent-ripple {
+      display: none !important;
+    }
+
+    .mdc-button__touch {
+      display: none !important;
+    }
+
+    &:hover:not(:disabled) {
+      background-color: black !important;
+      color: white !important;
+    }
+
+    &:focus:not(:disabled) {
+      background-color: black !important;
+      color: white !important;
+      outline: 1px solid black !important;
+      outline-offset: 2px !important;
+    }
+
+    &:active:not(:disabled) {
+      background-color: black !important;
+      color: white !important;
+    }
+
+    &:disabled {
+      background-color: #999 !important;
+      color: white !important;
+      opacity: 0.6 !important;
+    }
+  }
+
+  .mat-mdc-button,
+  button[mat-stroked-button] {
+    --mdc-text-button-label-text-color: black !important;
+    --mat-text-button-state-layer-color: transparent !important;
+    --mdc-text-button-hover-state-layer-color: transparent !important;
+    --mdc-text-button-focus-state-layer-color: transparent !important;
+    --mdc-text-button-pressed-state-layer-color: transparent !important;
+    color: black !important;
+    border: 1px solid black !important;
+    background: white !important;
+    font-family: 'Nunito Sans', sans-serif !important;
+
+    .mdc-button__ripple {
+      display: none !important;
+    }
+
+    .mat-mdc-button-persistent-ripple {
+      display: none !important;
+    }
+
+    .mdc-button__touch {
+      display: none !important;
+    }
+
+    &:hover:not(:disabled) {
+      background-color: black !important;
+      color: white !important;
+      border-color: black !important;
+    }
+
+    &:focus:not(:disabled) {
+      background-color: white !important;
+      color: black !important;
+      border-color: black !important;
+      outline: 1px solid black !important;
+      outline-offset: 2px !important;
+    }
+
+    &:active:not(:disabled) {
+      background-color: black !important;
+      color: white !important;
+      border-color: black !important;
+    }
+
+    &:disabled {
+      background-color: white !important;
+      color: #999 !important;
+      border-color: #999 !important;
+      opacity: 0.6 !important;
+    }
+  }
+
+  // Form fields
+  .mat-mdc-form-field {
+    .mat-mdc-text-field-wrapper {
+      border: 1px solid black;
+      background-color: transparent !important;
+    }
+
+    .mat-mdc-form-field-input-control input {
+      color: black !important;
+      font-family: 'Nunito Sans', sans-serif !important;
+      background-color: transparent !important;
+    }
+
+    .mat-mdc-form-field-label {
+      color: black !important;
+      font-family: 'Nunito Sans', sans-serif !important;
+    }
+
+    .mat-mdc-form-field-focus-overlay {
+      background-color: transparent !important;
+      opacity: 0 !important;
+    }
+
+    .mdc-text-field--filled {
+      background-color: transparent !important;
+    }
+
+    .mdc-text-field--outlined {
+      background-color: transparent !important;
+    }
+
+    .mdc-notched-outline {
+      background-color: transparent !important;
+    }
+
+    &.mat-focused {
+      .mat-mdc-text-field-wrapper {
+        border-color: black !important;
+        background-color: transparent !important;
+      }
+
+      .mat-mdc-form-field-label {
+        color: black !important;
+      }
+
+      .mat-mdc-form-field-focus-overlay {
+        background-color: transparent !important;
+        opacity: 0 !important;
+      }
+    }
+  }
+
+  // Checkbox
+  .mat-mdc-checkbox {
+    .mdc-checkbox {
+      .mdc-checkbox__ripple {
+        display: none !important;
+      }
+
+      .mdc-checkbox__native-control:enabled:checked ~ .mdc-checkbox__background {
+        background-color: black !important;
+        border-color: black !important;
+      }
+
+      .mdc-checkbox__native-control:enabled:indeterminate ~ .mdc-checkbox__background {
+        background-color: black !important;
+        border-color: black !important;
+      }
+
+      .mdc-checkbox__native-control:enabled ~ .mdc-checkbox__background .mdc-checkbox__checkmark {
+        color: white !important;
+      }
+
+      .mdc-checkbox__native-control:enabled:focus ~ .mdc-checkbox__background {
+        background-color: transparent !important;
+      }
+    }
+
+    .mdc-form-field__label {
+      color: black !important;
+      font-family: 'Nunito Sans', sans-serif !important;
+    }
+  }
+
+  // Progress spinner
+  .mat-mdc-progress-spinner {
+    .mdc-circular-progress__determinate-circle,
+    .mdc-circular-progress__indeterminate-circle-graphic {
+      stroke: black !important;
+    }
+  }
+
+  // Error messages
+  .mat-mdc-form-field-error {
+    color: black !important;
+    font-family: 'Nunito Sans', sans-serif !important;
+  }
+
+  // Remove all focus backgrounds and state layers
+  .mdc-text-field--focused {
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      border-color: black !important;
+    }
+  }
+
+  // Remove Stripe element focus backgrounds
+  #address-element,
+  #payment-element {
+    min-height: 200px; // Ensure container has height
+    width: 100%;
+    display: block;
+    
+    * {
+      &:focus,
+      &:focus-visible,
+      &:focus-within {
+        background-color: transparent !important;
+        outline: none !important;
+      }
+    }
+
+    .Input:focus,
+    .Input--focus {
+      background-color: transparent !important;
+      box-shadow: 0 0 0 1px black !important;
+    }
+
+    .Label {
+      background-color: transparent !important;
+    }
+
+    // Apple Pay button styling - ensure it's visible
+    button[data-testid="apple-pay-button"],
+    .ApplePayButton,
+    [id*="apple-pay"],
+    iframe[title*="Apple Pay"] {
+      font-family: 'Nunito Sans', sans-serif !important;
+      border-radius: 4px !important;
+      min-height: 48px !important;
+      width: 100% !important;
+      margin: 16px 0 !important;
+      display: block !important;
+    }
+
+    // Ensure QR code modal/popup is visible and styled properly
+    [data-testid="apple-pay-qr-code"],
+    .ApplePayQRCode,
+    .StripeElement--ApplePayQRCode,
+    iframe[title*="Apple Pay QR"],
+    div[class*="ApplePay"],
+    div[class*="apple-pay"] {
+      border: 1px solid black !important;
+      border-radius: 4px !important;
+      background-color: white !important;
+      z-index: 9999 !important;
+      position: relative !important;
+    }
+
+    // Style the QR code container - ensure it appears above other elements
+    .StripeElement--ApplePay {
+      z-index: 10000 !important;
+      position: relative !important;
+      
+      .ApplePayButton {
+        min-height: 48px !important;
+        width: 100% !important;
+      }
+    }
+  }
+
+  // Remove all stepper step backgrounds
+  .mat-step-header {
+    background-color: transparent !important;
+    
+    &::before,
+    &::after {
+      display: none !important;
+    }
+  }
+
+  .mat-step-header-ripple {
+    display: none !important;
+  }
+
+  .mat-step-header .mat-step-icon-container {
+    background-color: transparent !important;
+  }
+
+  // Remove any grey backgrounds from stepper content
+  .mat-step-content {
+    background-color: transparent !important;
+  }
+
+  .mat-step-body {
+    background-color: transparent !important;
+  }
+}
+

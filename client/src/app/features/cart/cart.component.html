@@ -1,24 +1,36 @@
-<section>
-    @if (cartService.cart()?.items?.length! > 0) {
+<section class="cart-page">
+  @if (cartService.cart()?.items?.length! > 0) {
+    <div class="cart-container">
+      <!-- Cart Items -->
+      <div class="cart-items">
+        @for (item of cartService.cart()?.items; track item.productId) {
+          <app-cart-item [item]="item"></app-cart-item>
+        }
+      </div>
 
-    <div class="flex w-full items-start gap-6 mt-32">
-        <div class="w-3/4">
-            @for (item of cartService.cart()?.items; track item.productId) {
-            <app-cart-item [item]="item"></app-cart-item>
-            }
+      <!-- Divider -->
+      <div class="cart-divider"></div>
+
+      <!-- Subtotal and Checkout -->
+      <div class="cart-summary">
+        <div class="subtotal-row">
+          <span class="subtotal-label">Subtotal</span>
+          <span class="subtotal-amount">{{ cartService.totals()?.subtotal | currency }}</span>
         </div>
-        <div class="w-1/4">
-            <app-order-summary></app-order-summary>
-        </div>
+        <button
+          routerLink="/checkout"
+          class="checkout-button"
+        >
+          Secure Checkout
+        </button>
+      </div>
     </div>
-
-    } @else {
+  } @else {
     <app-empty-state 
-        message="Your shopping cart is empty"
-        icon="remove_shopping_cart"
-        actionText="Go to shop"
-        (action)="onAction()"
+      message="Your shopping cart is empty"
+      icon="remove_shopping_cart"
+      actionText="Go to shop"
+      (action)="onAction()"
     />
-    }
-
+  }
 </section>

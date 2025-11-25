@@ -1,0 +1,72 @@
+// Black and white theme for checkout review
+::ng-deep {
+  .mat-mdc-button,
+  button[mat-stroked-button] {
+    --mdc-text-button-label-text-color: black !important;
+    --mat-text-button-state-layer-color: transparent !important;
+    --mdc-text-button-hover-state-layer-color: transparent !important;
+    --mdc-text-button-focus-state-layer-color: transparent !important;
+    --mdc-text-button-pressed-state-layer-color: transparent !important;
+    color: black !important;
+    border: 1px solid black !important;
+    background: white !important;
+    font-family: 'Nunito Sans', sans-serif !important;
+
+    .mdc-button__ripple {
+      display: none !important;
+    }
+
+    &:hover:not(:disabled) {
+      background-color: black !important;
+      color: white !important;
+      border-color: black !important;
+    }
+
+    &:focus:not(:disabled) {
+      background-color: white !important;
+      color: black !important;
+      border-color: black !important;
+    }
+
+    &:disabled {
+      background-color: white !important;
+      color: #999 !important;
+      border-color: #999 !important;
+      opacity: 0.6 !important;
+    }
+  }
+
+  .mat-mdc-flat-button,
+  button[mat-flat-button] {
+    --mdc-filled-button-container-color: black !important;
+    --mdc-filled-button-label-text-color: white !important;
+    --mdc-filled-button-hover-state-layer-color: transparent !important;
+    --mdc-filled-button-focus-state-layer-color: transparent !important;
+    --mdc-filled-button-pressed-state-layer-color: transparent !important;
+    background-color: black !important;
+    color: white !important;
+    font-family: 'Nunito Sans', sans-serif !important;
+    border: none !important;
+
+    .mdc-button__ripple {
+      display: none !important;
+    }
+
+    &:hover:not(:disabled) {
+      background-color: black !important;
+      color: white !important;
+    }
+
+    &:focus:not(:disabled) {
+      background-color: black !important;
+      color: white !important;
+    }
+
+    &:disabled {
+      background-color: #999 !important;
+      color: white !important;
+      opacity: 0.6 !important;
+    }
+  }
+}
+

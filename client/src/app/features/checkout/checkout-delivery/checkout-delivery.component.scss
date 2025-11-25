@@ -1,0 +1,39 @@
+// Override Material radio button styles for black and white theme
+::ng-deep {
+  .mat-mdc-radio-button {
+    .mdc-radio {
+      .mdc-radio__native-control:enabled:checked + .mdc-radio__background {
+        .mdc-radio__outer-circle {
+          border-color: black !important;
+        }
+
+        .mdc-radio__inner-circle {
+          border-color: black !important;
+          background-color: black !important;
+        }
+      }
+
+      .mdc-radio__native-control:enabled:not(:checked) + .mdc-radio__background {
+        .mdc-radio__outer-circle {
+          border-color: black !important;
+        }
+      }
+    }
+
+    .mdc-form-field__label {
+      color: black !important;
+      font-family: 'Nunito Sans', sans-serif !important;
+    }
+  }
+}
+
+label {
+  font-family: 'Nunito Sans', sans-serif;
+  color: black;
+  border-color: black !important;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.05) !important;
+  }
+}
+

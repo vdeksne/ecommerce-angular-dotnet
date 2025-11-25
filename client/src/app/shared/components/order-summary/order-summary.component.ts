@@ -16,13 +16,8 @@ import { FormsModule } from '@angular/forms';
   imports: [
     MatButton,
     RouterLink,
-    MatFormField,
-    MatLabel,
-    MatInput,
     CurrencyPipe,
-    FormsModule,
-    NgIf,
-    MatIcon
+    FormsModule
   ],
   templateUrl: './order-summary.component.html',
   styleUrl: './order-summary.component.scss'

@@ -167,9 +167,16 @@
   padding: 8px 24px;
   background: white;
   
-  &:hover {
+  &:hover:not(:disabled) {
     background: black;
     color: white;
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: white;
+    color: black;
   }
 }
 

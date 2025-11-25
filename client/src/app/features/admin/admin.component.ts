@@ -6,6 +6,11 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
+import {
+  DragDropModule,
+  CdkDragDrop,
+  moveItemInArray,
+} from '@angular/cdk/drag-drop';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Order } from '../../shared/models/order';
 import {
@@ -71,6 +76,7 @@ import { getImageUrl } from '../../shared/utils/image-url.util';
     MatProgressSpinnerModule,
     MatError,
     MatCheckboxModule,
+    DragDropModule,
   ],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.scss',
@@ -382,7 +388,7 @@ export class AdminComponent implements OnInit {
     this.productForm = this.fb.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
-      price: [0, [Validators.required, Validators.min(0.01)]],
+      price: [0, [Validators.required, Validators.min(0)]],
       pictureUrl: ['', Validators.required],
       detailImage1Url: [''],
       detailImage2Url: [''],
@@ -1125,6 +1131,45 @@ export class AdminComponent implements OnInit {
         this.snackbar.error('Failed to load archive images');
       },
     });
+  }
+
+  onArchiveImageDrop(event: CdkDragDrop<ArchiveImage[]>) {
+    moveItemInArray(
+      this.archiveImages,
+      event.previousIndex,
+      event.currentIndex
+    );
+
+    // Update displayOrder for all images based on their new positions
+    this.archiveImages.forEach((image, index) => {
+      image.displayOrder = index + 1;
+    });
+
+    // Save the new order to the backend
+    this.saveArchiveImageOrder();
+  }
+
+  saveArchiveImageOrder() {
+    // Update all images with their new displayOrder
+    const updatePromises = this.archiveImages.map((image) => {
+      const updateDto: UpdateArchiveImageDto = {
+        displayOrder: image.displayOrder,
+      };
+      return this.adminService
+        .updateArchiveImage(image.id, updateDto)
+        .toPromise();
+    });
+
+    Promise.all(updatePromises)
+      .then(() => {
+        this.snackbar.success('Archive image order updated successfully');
+      })
+      .catch((error) => {
+        console.error('Error updating archive image order:', error);
+        this.snackbar.error('Failed to update archive image order');
+        // Reload images to revert to original order
+        this.loadArchiveImages();
+      });
   }
 
   openAddArchiveForm() {

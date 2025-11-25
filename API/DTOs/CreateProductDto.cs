@@ -10,7 +10,7 @@ public class CreateProductDto
     [Required]
     public string Description { get; set; } = string.Empty;
     
-    [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than 0")]
+    [Range(0, double.MaxValue, ErrorMessage = "Price must be 0 or greater")]
     public decimal Price { get; set; }
 
     [Required]

@@ -21,9 +21,10 @@
   position: relative;
   width: 100%;
   max-width: 1202px;
-  height: 801px;
+  aspect-ratio: 16 / 9;
   margin: 0 auto;
   margin-bottom: 0;
+  overflow: hidden;
 }
 
 .main-image-placeholder {
@@ -49,10 +50,54 @@
   right: 10px;
   background-color: rgba(0, 0, 0, 0.7) !important;
   color: white !important;
+  z-index: 10;
   
   mat-icon {
     color: white !important;
   }
+}
+
+// Navigation arrows
+.nav-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.7) !important;
+  color: white !important;
+  z-index: 10;
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: 50%;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.9) !important;
+    transform: translateY(-50%) scale(1.1);
+  }
+  
+  mat-icon {
+    color: white !important;
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.nav-arrow-left {
+  left: 20px;
+}
+
+.nav-arrow-right {
+  right: 20px;
 }
 
 // Thumbnail Gallery
@@ -197,8 +242,7 @@
 
   .main-image-container {
     width: calc(100% - 126px);
-    height: auto;
-    aspect-ratio: 1202 / 801;
+    aspect-ratio: 16 / 9;
   }
 
   .thumbnail-gallery {
@@ -221,8 +265,7 @@
 
   .main-image-container {
     width: 100%;
-    height: auto;
-    aspect-ratio: 1202 / 801;
+    aspect-ratio: 16 / 9;
   }
 
   .thumbnail-gallery {

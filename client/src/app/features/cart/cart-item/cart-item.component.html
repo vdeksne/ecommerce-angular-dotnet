@@ -3,23 +3,22 @@
     <a routerLink="/shop/{{ item().productId }}" class="cart-item-image">
       <img [src]="getImageUrl(item().pictureUrl)" alt="product image" />
     </a>
-    <div class="cart-item-details">
+    <div class="cart-item-info">
       <a routerLink="/shop/{{ item().productId }}" class="cart-item-name">
         {{ item().productName }}
       </a>
-      <div class="cart-item-actions">
-        <button mat-button class="delete-button" (click)="removeItemFromCart()">
-          Remove
-        </button>
-      </div>
+      @if (getProductSize()) {
+      <div class="cart-item-size">Size: {{ getProductSize() }}</div>
+      }
     </div>
-    <div class="cart-item-controls">
-      <!-- <div class="quantity-controls">
+    <div class="cart-item-controls-row">
+      <div class="cart-item-quantity">
         <button
           mat-icon-button
           class="quantity-button"
           (click)="decrementQuantity()"
           [disabled]="item().quantity <= 0"
+          aria-label="Decrease quantity"
         >
           <mat-icon>remove</mat-icon>
         </button>
@@ -28,13 +27,14 @@
           mat-icon-button
           class="quantity-button"
           (click)="incrementQuantity()"
-          [disabled]="item().quantity >= item().quantityInStock"
+          [disabled]="!canIncrement()"
+          aria-label="Increase quantity"
         >
           <mat-icon>add</mat-icon>
         </button>
-      </div> -->
-      <div class="price-display">
-        <p>{{ item().price | currency }}</p>
+      </div>
+      <div class="cart-item-price">
+        {{ item().price | currency }}
       </div>
     </div>
   </div>

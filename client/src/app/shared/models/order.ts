@@ -43,6 +43,7 @@ export interface Order {
     cartId: string;
     deliveryMethodId: number;
     shippingAddress: ShippingAddress;
-    paymentSummary: PaymentSummary;
+    paymentSummary: PaymentSummary | null;
     discount?: number;
+    buyerEmail: string;
   }

@@ -66,8 +66,22 @@ export class ProductDetailsComponent implements OnInit {
 
   inquireToAcquire() {
     if (!this.product) return;
-    this.cartService.addItemToCart(this.product);
+
+    // Check if we can add to cart
+    if (!this.cartService.canAddToCart(this.product)) {
+      return; // Cannot add more items
+    }
+
+    this.cartService.addItemToCart(this.product).catch((error) => {
+      console.error('Error adding to cart:', error);
+      // Optionally show a user-friendly message
+    });
     this.updateQuantityInCart();
+  }
+
+  canAddToCart(): boolean {
+    if (!this.product) return false;
+    return this.cartService.canAddToCart(this.product);
   }
 
   getProductSize(): string {

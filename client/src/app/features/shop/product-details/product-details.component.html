@@ -55,6 +55,7 @@
             mat-stroked-button
             class="inquire-button"
             (click)="inquireToAcquire()"
+            [disabled]="!canAddToCart()"
           >
             Inquire to acquire
           </button>

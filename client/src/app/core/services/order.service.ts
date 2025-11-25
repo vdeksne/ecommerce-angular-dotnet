@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Order, OrderToCreate } from '../../shared/models/order';
+import { tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,9 +11,15 @@ export class OrderService {
   baseUrl = environment.apiUrl;
   private http = inject(HttpClient);
   orderComplete = false;
+  lastCreatedOrder: Order | null = null;
 
   createOrder(orderToCreate: OrderToCreate) {
-    return this.http.post<Order>(this.baseUrl + 'orders', orderToCreate);
+    return this.http.post<Order>(this.baseUrl + 'orders', orderToCreate).pipe(
+      tap(order => {
+        this.lastCreatedOrder = order;
+        this.orderComplete = true;
+      })
+    );
   }
 
   getOrdersForUser() {

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, HostListener, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminService } from '../../core/services/admin.service';
 import { AccountService } from '../../core/services/account.service';
@@ -27,6 +27,7 @@ export class ArchiveComponent implements OnInit {
   private snackbar = inject(SnackbarService);
   
   images: ArchiveImage[] = [];
+  allImages: ArchiveImage[] = []; // All images sorted by display order
   mainImage: ArchiveImage | null = null;
   thumbnailImages: ArchiveImage[] = [];
   selectedMainImage: ArchiveImage | null = null; // Currently displayed main image
@@ -47,6 +48,8 @@ export class ArchiveComponent implements OnInit {
           objectPositionX: img.objectPositionX ?? 50,
           objectPositionY: img.objectPositionY ?? 50
         }));
+        // Sort all images by display order
+        this.allImages = this.images.sort((a, b) => a.displayOrder - b.displayOrder);
         // Find the main image (marked as isMainImage)
         this.mainImage = this.images.find(img => img.isMainImage) || null;
         // All other images as thumbnails, sorted by display order
@@ -93,6 +96,47 @@ export class ArchiveComponent implements OnInit {
   // Click handler to change the main displayed image
   selectMainImage(image: ArchiveImage) {
     this.selectedMainImage = image;
+  }
+
+  // Navigate to previous image
+  previousImage() {
+    if (this.allImages.length === 0 || !this.selectedMainImage) return;
+    
+    const currentIndex = this.allImages.findIndex(img => img.id === this.selectedMainImage?.id);
+    if (currentIndex === -1) return;
+    
+    const previousIndex = currentIndex === 0 ? this.allImages.length - 1 : currentIndex - 1;
+    this.selectedMainImage = this.allImages[previousIndex];
+  }
+
+  // Navigate to next image
+  nextImage() {
+    if (this.allImages.length === 0 || !this.selectedMainImage) return;
+    
+    const currentIndex = this.allImages.findIndex(img => img.id === this.selectedMainImage?.id);
+    if (currentIndex === -1) return;
+    
+    const nextIndex = currentIndex === this.allImages.length - 1 ? 0 : currentIndex + 1;
+    this.selectedMainImage = this.allImages[nextIndex];
+  }
+
+  // Check if we can navigate (at least 2 images)
+  canNavigate(): boolean {
+    return this.allImages.length > 1;
+  }
+
+  // Keyboard navigation support
+  @HostListener('window:keydown', ['$event'])
+  handleKeyDown(event: KeyboardEvent) {
+    if (!this.canNavigate()) return;
+    
+    if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      this.previousImage();
+    } else if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      this.nextImage();
+    }
   }
 
   getImageUrl = getImageUrl;

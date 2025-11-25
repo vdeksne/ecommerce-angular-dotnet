@@ -123,65 +123,109 @@
 
 // Override Material styles for black and white theme
 ::ng-deep {
-  .mat-mdc-flat-button {
+  .mat-mdc-flat-button,
+  button[mat-flat-button] {
     --mdc-filled-button-container-color: black !important;
     --mdc-filled-button-label-text-color: white !important;
+    --mdc-filled-button-hover-state-layer-color: transparent !important;
+    --mdc-filled-button-focus-state-layer-color: transparent !important;
+    --mdc-filled-button-pressed-state-layer-color: transparent !important;
     background-color: black !important;
     color: white !important;
+    font-family: "Nunito Sans", sans-serif !important;
+    border: none !important;
 
-    &:hover:not(:disabled) {
-      --mdc-filled-button-hover-state-layer-color: rgba(
-        255,
-        255,
-        255,
-        0.1
-      ) !important;
-      background-color: black !important;
+    .mdc-button__ripple {
+      display: none !important;
     }
 
-    &:focus:not(:disabled) {
-      --mdc-filled-button-focus-state-layer-color: rgba(
-        255,
-        255,
-        255,
-        0.1
-      ) !important;
+    .mat-mdc-button-persistent-ripple {
+      display: none !important;
     }
-  }
-
-  .mat-mdc-button {
-    --mdc-text-button-label-text-color: black !important;
-    --mat-text-button-state-layer-color: transparent !important;
-    color: black !important;
-    border: 1px solid black !important;
-    background: transparent !important;
 
     &:hover:not(:disabled) {
-      --mdc-text-button-hover-state-layer-color: black !important;
-      --mdc-text-button-hover-label-text-color: white !important;
       background-color: black !important;
       color: white !important;
     }
 
     &:focus:not(:disabled) {
-      --mdc-text-button-focus-state-layer-color: black !important;
+      background-color: black !important;
+      color: white !important;
+    }
+
+    &:disabled {
+      background-color: #999 !important;
+      color: white !important;
+      opacity: 0.6 !important;
+    }
+  }
+
+  .mat-mdc-button,
+  button[mat-stroked-button] {
+    --mdc-text-button-label-text-color: black !important;
+    --mat-text-button-state-layer-color: transparent !important;
+    --mdc-text-button-hover-state-layer-color: transparent !important;
+    --mdc-text-button-focus-state-layer-color: transparent !important;
+    --mdc-text-button-pressed-state-layer-color: transparent !important;
+    color: black !important;
+    border: 1px solid black !important;
+    background: white !important;
+    font-family: "Nunito Sans", sans-serif !important;
+
+    .mdc-button__ripple {
+      display: none !important;
+    }
+
+    .mat-mdc-button-persistent-ripple {
+      display: none !important;
+    }
+
+    &:hover:not(:disabled) {
+      background-color: black !important;
+      color: white !important;
+      border-color: black !important;
+    }
+
+    &:focus:not(:disabled) {
+      background-color: white !important;
+      color: black !important;
+      border-color: black !important;
+    }
+
+    &:disabled {
+      background-color: white !important;
+      color: #999 !important;
+      border-color: #999 !important;
+      opacity: 0.6 !important;
     }
   }
 
   .mat-mdc-icon-button {
     --mdc-icon-button-icon-color: black !important;
     --mdc-icon-button-state-layer-color: transparent !important;
+    --mdc-icon-button-hover-state-layer-color: transparent !important;
+    --mdc-icon-button-focus-state-layer-color: transparent !important;
+    --mdc-icon-button-pressed-state-layer-color: transparent !important;
     color: black !important;
+    background: transparent !important;
+
+    .mdc-icon-button__ripple {
+      display: none !important;
+    }
 
     &:hover:not(:disabled) {
-      --mdc-icon-button-hover-state-layer-color: black !important;
-      --mdc-icon-button-hover-icon-color: white !important;
       background-color: black !important;
       color: white !important;
     }
 
     &:focus:not(:disabled) {
-      --mdc-icon-button-focus-state-layer-color: black !important;
+      background-color: transparent !important;
+      color: black !important;
+    }
+
+    &:disabled {
+      color: #999 !important;
+      opacity: 0.6 !important;
     }
   }
 
@@ -198,4 +242,26 @@
       color: black;
     }
   }
+}
+
+.mat-step-header {
+  background-color: transparent !important;
+}
+.cdk-program-focused {
+  background-color: transparent !important;
+}
+.mat-step-header.cdk-keyboard-focused {
+  background-color: transparent !important;
+}
+.mat-step-header.cdk-program-focused {
+  background-color: transparent !important;
+}
+.mat-step-header.cdk-program-focused {
+  background-color: transparent !important;
+}
+.mat-step-header.cdk-program-focused {
+  background-color: transparent !important;
+}
+.mat-step-header.cdk-program-focused {
+  background-color: transparent !important;
 }

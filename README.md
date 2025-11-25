@@ -1,13 +1,13 @@
 # Ecommerce Project
 
-This app is built using .Net 8 and Angular 18
+This app is built using .NET 9 and Angular 21
 
 # Running the project
 
 You can also run this app locally. To run this project locally you will need to have installed:
 
 1. Docker
-2. .Net SDK v8
+2. .NET SDK v9
 3. NodeJS (at least version 22.14) - Optional if you want to run the Angular app separately in development mode
 4. Clone the project in a User folder on your computer by running:
 
@@ -29,7 +29,7 @@ cd client
 npm install
 ```
 
-6. Most of the functionality will work without Stripe but if you wish to see the payment functionality working too then you will need to create a Stripe account and populate the keys from Stripe. In the API folder create a file called ‘appsettings.json’ with the following code:
+6. Most of the functionality will work without Stripe but if you wish to see the payment functionality working too then you will need to create a Stripe account and populate the keys from Stripe. In the API folder create a file called 'appsettings.json' with the following code:
 
 ```json
 {
@@ -47,6 +47,29 @@ npm install
   "AllowedHosts": "*"
 }
 ```
+
+**Email Configuration (Optional):**
+
+To enable order confirmation emails, configure SMTP settings in `API/appsettings.Development.json`:
+
+```json
+{
+  "EmailSettings": {
+    "SmtpHost": "smtp.gmail.com",
+    "SmtpPort": 587,
+    "SmtpUsername": "your-email@gmail.com",
+    "SmtpPassword": "your-app-password",
+    "FromEmail": "noreply@victoriadexne.com",
+    "FromName": "Victoria Dexne"
+  }
+}
+```
+
+**Note for Gmail:**
+
+- You'll need to use an [App Password](https://support.google.com/accounts/answer/185833) instead of your regular Gmail password
+- Enable 2-factor authentication on your Google account first
+- The app will log a warning if email settings are not configured, but orders will still be created successfully
 
 7. To use the Stripe webhook you will also need to use the StripeCLI, and when you run this you will be given a whsec key which you will need to add to the appsettings.json. To get this key and instructions on how to install the Stripe CLI you can go to your Stripe dashboad ⇒ Developers ⇒ Webhooks ⇒ Add local listener. The whsec key will be visible in the terminal when you run Stripe.
 8. Once you have the Stripe CLI you can then run this so it listens to stripe events and forward them to the .Net API:
@@ -96,3 +119,123 @@ ng serve
 
 14. Then browse to [https://localhost:4200](https://localhost:4200)
 15. You can use the Stripe test cards available from [here](https://docs.stripe.com/testing#cards) to pay for the orders.
+
+# Running Tests
+
+This project includes unit tests for payment and email confirmation functionality. To run the tests:
+
+## Prerequisites
+
+- .NET SDK v9 (same as required for running the application)
+
+## Running Backend Tests
+
+The test project is located in `API/Infrastructure.Tests/`. To run all tests:
+
+```bash
+# Navigate to the test project directory
+cd API/Infrastructure.Tests
+
+# Run all tests
+dotnet test
+
+# Run tests with verbose output
+dotnet test --verbosity normal
+
+# Run tests with detailed output
+dotnet test --verbosity detailed
+```
+
+## Test Coverage
+
+The test suite includes:
+
+### Payment Service Tests
+
+- Payment intent creation with valid cart
+- Exception handling for missing cart
+- Cart item price updates from product data
+- Refund payment handling
+
+### Email Service Tests
+
+- Email sending with valid configuration
+- Warning logging when SMTP settings are missing
+- Warning logging when buyer email is missing
+- Error handling without throwing exceptions
+
+## Running Specific Tests
+
+You can also run specific test classes or methods:
+
+```bash
+# Run tests in a specific class
+dotnet test --filter "FullyQualifiedName~PaymentServiceTests"
+
+# Run tests in a specific class
+dotnet test --filter "FullyQualifiedName~EmailServiceTests"
+
+# Run a specific test method
+dotnet test --filter "FullyQualifiedName~CreateOrUpdatePaymentIntent_WithValidCart_CreatesPaymentIntent"
+```
+
+## Test Results
+
+All tests should pass. The test suite validates:
+
+- Payment processing functionality
+- Email confirmation service
+- Error handling and edge cases
+- Configuration validation
+
+## Continuous Integration
+
+These tests can be integrated into CI/CD pipelines. The test project uses:
+
+- **xUnit** - Testing framework
+- **Moq** - Mocking framework for dependencies
+- **Microsoft.NET.Test.Sdk** - Test SDK
+
+How It Works:
+Apple Pay appears automatically in the Payment Element when:
+The user is on a supported device (iOS, macOS Safari, etc.)
+The payment intent includes Apple Pay as a payment method type
+Apple Pay is enabled in your Stripe account
+The Apple Pay button appears above the card input fields in the Payment step of checkout
+When a user selects Apple Pay:
+They authenticate with Face ID, Touch ID, or their device passcode
+Payment details are automatically filled from their Apple Pay wallet
+The payment processes through Stripe like any other payment method
+Testing:
+To test Apple Pay:
+
+**On Mobile Devices (iPhone, iPad, Mac with Safari):**
+
+1. Ensure Apple Pay is set up in your device's Wallet app
+2. Navigate to checkout and look for the Apple Pay button in the Payment step
+3. Complete a test transaction using Apple Pay directly
+
+**On Desktop Browsers (with QR Code):**
+
+1. Navigate to checkout on a desktop browser (Chrome, Firefox, Edge, etc.)
+2. Look for the Apple Pay button in the Payment step
+3. Click the Apple Pay button - a modern QR code will appear
+4. Scan the QR code with your iPhone using the Camera app
+5. Complete the payment on your iPhone using Apple Pay
+6. The payment will be processed automatically
+
+**Important Notes:**
+
+- **Localhost Development:** Apple Pay will NOT appear on `localhost` because Stripe requires domain verification. It will only work once deployed to a verified domain.
+- **Domain Verification Required:** To enable Apple Pay in production:
+  1. Go to Stripe Dashboard → Settings → Payment Methods → Apple Pay
+  2. Add your production domain (e.g., `yourdomain.com`)
+  3. Download the verification file `apple-developer-merchantid-domain-association`
+  4. Upload it to `https://yourdomain.com/.well-known/apple-developer-merchantid-domain-association`
+  5. Click "Verify" in Stripe Dashboard
+- Apple Pay on mobile appears automatically on supported devices (iOS, macOS Safari)
+- Apple Pay on desktop shows a QR code that can be scanned with an iPhone
+- On unsupported devices, users will only see the standard card input fields
+- The QR code feature works on all desktop browsers, making Apple Pay accessible to desktop users
+
+All code compiles successfully and is ready to use.

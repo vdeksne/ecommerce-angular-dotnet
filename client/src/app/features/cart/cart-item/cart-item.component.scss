@@ -1,21 +1,30 @@
 .cart-item {
-  // border: 1px solid black;
   background: white;
-  padding: 1rem;
-  margin-bottom: 1rem;
+  padding: 0;
+  margin-bottom: 0;
+  font-family: "Nunito Sans", sans-serif;
+  transition: all 0.3s ease;
 
   .cart-item-content {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    gap: 40px;
+    padding: 20px 0;
+    transition: all 0.3s ease;
+  }
+
+  .cart-item-controls-row {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    flex-shrink: 0;
   }
 
   .cart-item-image {
     flex-shrink: 0;
-    width: 200px;
+    width: 364px;
     aspect-ratio: 16 / 9;
     overflow: hidden;
-    // border: 1px solid black;
 
     img {
       width: 100%;
@@ -25,15 +34,18 @@
     }
   }
 
-  .cart-item-details {
+  .cart-item-info {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    max-width: 400px;
+    gap: 8px;
+    min-width: 0;
 
     .cart-item-name {
-      font-weight: 500;
+      font-family: "Nunito Sans", sans-serif;
+      font-weight: 400;
+      font-size: 19.27px;
+      line-height: 1.2;
       color: black;
       text-decoration: none;
 
@@ -42,109 +54,312 @@
       }
     }
 
-    .cart-item-actions {
-      .delete-button {
-        color: black;
-        // border: 1px solid black;
-
-        &:hover {
-          background: black;
-          color: white;
-        }
-      }
+    .cart-item-size {
+      font-family: "Nunito Sans", sans-serif;
+      font-weight: 400;
+      font-size: 13px;
+      line-height: 1.2;
+      color: black;
     }
   }
 
-  .cart-item-controls {
+  .cart-item-quantity {
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    width: 42px;
+    height: 42px;
+    position: relative;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
 
-    .quantity-controls {
+    .quantity-button {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      min-width: 16px;
+      padding: 0;
+      color: black;
+      background: transparent;
+      border: none;
+      cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 0.75rem;
-
-      .quantity-button {
-        color: black;
-        // border: 1px solid black;
-
-        &:hover:not(:disabled) {
-          background: black;
-          color: white;
-        }
-
-        &:disabled {
-          opacity: 0.3;
-          cursor: not-allowed;
-        }
-
-        mat-icon {
-          color: inherit;
-        }
-      }
-
-      .quantity-display {
-        font-weight: 600;
-        font-size: 1.25rem;
-        min-width: 2rem;
-        text-align: center;
-        color: black;
-      }
-    }
-
-    .price-display {
-      p {
-        font-weight: bold;
-        font-size: 1.25rem;
-        color: black;
-      }
-    }
-  }
-}
-
-// Override Material button styles for black and white theme
-::ng-deep {
-  .cart-item {
-    .mat-mdc-icon-button {
-      --mdc-icon-button-icon-color: black !important;
-      --mdc-icon-button-state-layer-color: transparent !important;
-      color: black !important;
+      justify-content: center;
+      z-index: 1;
+      transition: all 0.2s ease;
+      border-radius: 2px;
 
       &:hover:not(:disabled) {
-        --mdc-icon-button-hover-state-layer-color: black !important;
-        --mdc-icon-button-hover-icon-color: white !important;
-        background-color: black !important;
-        color: white !important;
+        opacity: 0.7;
+        background: rgba(0, 0, 0, 0.05);
       }
 
-      &:focus:not(:disabled) {
-        --mdc-icon-button-focus-state-layer-color: black !important;
+      &:active:not(:disabled) {
+        transform: scale(0.95);
       }
 
       &:disabled {
         opacity: 0.3;
+        cursor: not-allowed;
+      }
+
+      mat-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+        line-height: 16px;
+        color: black;
+        transition: all 0.2s ease;
+      }
+
+      &:first-child {
+        left: 0;
+      }
+
+      &:last-child {
+        right: 0;
       }
     }
 
-    .mat-mdc-button {
-      --mdc-text-button-label-text-color: black !important;
-      --mat-text-button-state-layer-color: transparent !important;
-      color: black !important;
-      border: 1px solid black !important;
-      background: transparent !important;
+    .quantity-display {
+      font-family: "Nunito Sans", sans-serif;
+      font-weight: 400;
+      font-size: 22px;
+      text-align: center;
+      color: black;
+      width: 100%;
+      line-height: 42px;
+      position: relative;
+      z-index: 0;
+      transition: all 0.3s ease;
+    }
+  }
 
-      &:hover:not(:disabled) {
-        --mdc-text-button-hover-state-layer-color: black !important;
-        --mdc-text-button-hover-label-text-color: white !important;
-        background-color: black !important;
-        color: white !important;
+  .cart-item-price {
+    font-family: "Nunito Sans", sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    color: black;
+    text-align: right;
+    min-width: 112px;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+  }
+}
+
+// Responsive breakpoints with smooth transitions
+
+// Large tablets and smaller desktops
+@media (max-width: 1280px) {
+  .cart-item {
+    .cart-item-content {
+      gap: 32px;
+      transition: gap 0.3s ease;
+    }
+
+    .cart-item-image {
+      width: 300px;
+      transition: width 0.3s ease;
+    }
+  }
+}
+
+// Tablets
+@media (max-width: 1024px) {
+  .cart-item {
+    .cart-item-content {
+      gap: 24px;
+    }
+
+    .cart-item-image {
+      width: 240px;
+    }
+
+    .cart-item-name {
+      font-size: 17px;
+    }
+
+    .cart-item-size {
+      font-size: 12px;
+    }
+
+    .cart-item-price {
+      font-size: 18px;
+      min-width: 100px;
+    }
+  }
+}
+
+// Mobile landscape and small tablets
+@media (max-width: 768px) {
+  .cart-item {
+    .cart-item-content {
+      flex-wrap: wrap;
+      gap: 20px;
+      padding: 24px 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+
+    // Create a row for quantity and price on mobile
+    .cart-item-controls-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      gap: 16px;
+      order: 3;
+    }
+
+    .cart-item-image {
+      width: 100%;
+      max-width: 100%;
+      order: 1;
+    }
+
+    .cart-item-info {
+      width: 100%;
+      order: 2;
+      gap: 6px;
+    }
+
+    .cart-item-name {
+      font-size: 16px;
+      line-height: 1.3;
+    }
+
+    .cart-item-size {
+      font-size: 11px;
+    }
+
+    .cart-item-controls-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      gap: 16px;
+      order: 3;
+    }
+
+    .cart-item-quantity {
+      width: 38px;
+      height: 38px;
+
+      .quantity-display {
+        font-size: 20px;
+        line-height: 38px;
       }
 
-      &:focus:not(:disabled) {
-        --mdc-text-button-focus-state-layer-color: black !important;
+      .quantity-button {
+        mat-icon {
+          font-size: 14px;
+          width: 14px;
+          height: 14px;
+          line-height: 14px;
+        }
       }
+    }
+
+    .cart-item-price {
+      text-align: right;
+      min-width: auto;
+      font-size: 18px;
+      font-weight: 500;
+    }
+  }
+}
+
+// Mobile portrait
+@media (max-width: 480px) {
+  .cart-item {
+    .cart-item-content {
+      gap: 16px;
+      padding: 20px 0;
+    }
+
+    .cart-item-image {
+      width: 100%;
+    }
+
+    .cart-item-info {
+      gap: 4px;
+    }
+
+    .cart-item-name {
+      font-size: 15px;
+      line-height: 1.4;
+    }
+
+    .cart-item-size {
+      font-size: 10px;
+    }
+
+    .cart-item-controls-row {
+      gap: 12px;
+    }
+
+    .cart-item-quantity {
+      width: 36px;
+      height: 36px;
+
+      .quantity-display {
+        font-size: 18px;
+        line-height: 36px;
+      }
+
+      .quantity-button {
+        width: 14px;
+        height: 14px;
+        min-width: 14px;
+
+        mat-icon {
+          font-size: 13px;
+          width: 13px;
+          height: 13px;
+          line-height: 13px;
+        }
+      }
+    }
+
+    .cart-item-price {
+      font-size: 16px;
+    }
+  }
+}
+
+// Very small mobile devices
+@media (max-width: 360px) {
+  .cart-item {
+    .cart-item-content {
+      gap: 12px;
+      padding: 16px 0;
+    }
+
+    .cart-item-name {
+      font-size: 14px;
+    }
+
+    .cart-item-size {
+      font-size: 9px;
+    }
+
+    .cart-item-quantity {
+      width: 32px;
+      height: 32px;
+
+      .quantity-display {
+        font-size: 16px;
+        line-height: 32px;
+      }
+    }
+
+    .cart-item-price {
+      font-size: 15px;
     }
   }
 }

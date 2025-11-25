@@ -2,9 +2,18 @@
     <h4 class="text-lg font-semibold">Billing and delivery information</h4>
     <dl>
         <dt class="font-medium">Shipping address</dt>
+        @if (isFreeOrder() && shippingAddress) {
+        <dd class="mt-1 text-gray-500">{{shippingAddress | address}}</dd>
+        } @else {
         <dd class="mt-1 text-gray-500">{{confirmationToken?.shipping | address}}</dd>
+        }
+        @if (isFreeOrder()) {
+        <dt class="font-medium">Payment</dt>
+        <dd class="mt-1 text-gray-500">No payment required - Free digital art</dd>
+        } @else {
         <dt class="font-medium">Payment details</dt>
         <dd class="mt-1 text-gray-500">{{confirmationToken?.payment_method_preview | paymentCard}}</dd>
+        }
     </dl>
 </div>
 

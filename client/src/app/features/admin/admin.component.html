@@ -245,7 +245,7 @@
                   formControlName="price"
                   placeholder="0.00"
                   step="0.01"
-                  min="0.01"
+                  min="0"
                 />
                 <span matPrefix class="mr-2">$&nbsp;</span>
                 <mat-icon matPrefix>attach_money</mat-icon>
@@ -254,7 +254,7 @@
                 <mat-error>Price is required</mat-error>
                 } @if (productForm.get('price')?.hasError('min') &&
                 productForm.get('price')?.touched) {
-                <mat-error>Price must be greater than $0.01</mat-error>
+                <mat-error>Price must be 0 or greater</mat-error>
                 }
               </mat-form-field>
 
@@ -963,9 +963,24 @@
 
       <!-- Archive Images List -->
       <div class="p-4">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div
+          cdkDropList
+          (cdkDropListDropped)="onArchiveImageDrop($event)"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+        >
           @for (image of archiveImages; track image.id) {
-          <div class="border border-black rounded-lg p-4 bg-white">
+          <div
+            cdkDrag
+            class="border border-black rounded-lg p-4 bg-white cursor-move archive-image-card"
+          >
+            <div class="flex items-center justify-between mb-2">
+              <p class="text-sm text-black font-semibold">
+                Order: {{ image.displayOrder }}
+              </p>
+              <mat-icon class="drag-handle text-black cursor-move"
+                >drag_indicator</mat-icon
+              >
+            </div>
             <div
               class="relative mb-4 overflow-hidden rounded-lg"
               style="aspect-ratio: 16/9"
@@ -989,9 +1004,6 @@
               }
             </div>
             <h3 class="font-bold text-black mb-2">{{ image.title }}</h3>
-            <p class="text-sm text-black mb-2">
-              Order: {{ image.displayOrder }}
-            </p>
             @if (image.description) {
             <p class="text-sm text-black mb-4 line-clamp-2">
               {{ image.description }}

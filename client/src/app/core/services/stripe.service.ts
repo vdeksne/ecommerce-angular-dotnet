@@ -28,13 +28,98 @@ export class StripeService {
     return this.stripePromise;
   }
 
-  async initializeElements() {
+  async initializeElements(requirePayment: boolean = true) {
     if (!this.elements) {
       const stripe = await this.getStripeInstance();
       if (stripe) {
         const cart = await firstValueFrom(this.createOrUpdatePaymentIntent());
-        this.elements = stripe.elements(
-          {clientSecret: cart.clientSecret, appearance: {labels: 'floating'}})
+        // For free orders, use setupClientSecret (Setup Intent) instead of clientSecret (Payment Intent)
+        const clientSecret = cart.clientSecret || cart.setupClientSecret;
+        
+        if (!clientSecret) {
+          if (requirePayment) {
+            return null; // Payment elements require clientSecret
+          }
+          // For address-only (free orders), create elements without clientSecret
+          this.elements = stripe.elements({
+            appearance: {
+              labels: 'floating',
+              theme: 'stripe',
+              variables: {
+                colorPrimary: '#000000',
+                colorBackground: '#ffffff',
+                colorText: '#000000',
+                colorDanger: '#000000',
+                fontFamily: '"Nunito Sans", sans-serif',
+                borderRadius: '4px',
+                spacingUnit: '4px'
+              },
+              rules: {
+                '.Input': {
+                  borderColor: '#000000',
+                  color: '#000000',
+                  fontFamily: '"Nunito Sans", sans-serif'
+                },
+                '.Input:focus': {
+                  borderColor: '#000000',
+                  boxShadow: '0 0 0 1px #000000'
+                },
+                '.Label': {
+                  color: '#000000',
+                  fontFamily: '"Nunito Sans", sans-serif'
+                },
+                '.Error': {
+                  color: '#000000',
+                  fontFamily: '"Nunito Sans", sans-serif'
+                },
+                '.ApplePayButton': {
+                  fontFamily: '"Nunito Sans", sans-serif'
+                }
+              }
+            }
+          });
+          return this.elements;
+        } else {
+          // Normal flow with clientSecret (Payment Intent) or setupClientSecret (Setup Intent)
+          this.elements = stripe.elements({
+            clientSecret: clientSecret,
+            appearance: {
+              labels: 'floating',
+              theme: 'stripe',
+              variables: {
+                colorPrimary: '#000000',
+                colorBackground: '#ffffff',
+                colorText: '#000000',
+                colorDanger: '#000000',
+                fontFamily: '"Nunito Sans", sans-serif',
+                borderRadius: '4px',
+                spacingUnit: '4px'
+              },
+              rules: {
+                '.Input': {
+                  borderColor: '#000000',
+                  color: '#000000',
+                  fontFamily: '"Nunito Sans", sans-serif'
+                },
+                '.Input:focus': {
+                  borderColor: '#000000',
+                  boxShadow: '0 0 0 1px #000000'
+                },
+                '.Label': {
+                  color: '#000000',
+                  fontFamily: '"Nunito Sans", sans-serif'
+                },
+                '.Error': {
+                  color: '#000000',
+                  fontFamily: '"Nunito Sans", sans-serif'
+                },
+                '.ApplePayButton': {
+                  fontFamily: '"Nunito Sans", sans-serif'
+                }
+              }
+            }
+          });
+        }
       } else {
         throw new Error('Stripe has not been loaded');
       }
@@ -46,7 +131,23 @@ export class StripeService {
     if (!this.paymentElement) {
       const elements = await this.initializeElements();
       if (elements) {
-        this.paymentElement = elements.create('payment');
+        try {
+          // Use type assertion to work around Stripe TypeScript definition issues
+          // Configure Apple Pay to always show when available
+          this.paymentElement = (elements.create as any)('payment', {
+            wallets: {
+              applePay: 'always',
+              googlePay: 'never'
+            },
+            // Additional options to ensure Apple Pay is visible
+            layout: 'tabs'
+          });
+          console.log('Payment Element created with Apple Pay enabled');
+        } catch (error) {
+          console.warn('Error creating Payment Element with wallets, falling back to basic:', error);
+          // Fallback if wallets option causes issues
+          this.paymentElement = (elements.create as any)('payment');
+        }
       } else {
         throw new Error('Elements instance has not been initialized');
       }
@@ -56,7 +157,8 @@ export class StripeService {
 
   async createAddressElement() {
     if (!this.addressElement) {
-      const elements = await this.initializeElements();
+      // For address element, don't require payment (allow free orders)
+      const elements = await this.initializeElements(false);
       if (elements) {
         const user = this.accountService.currentUser();
         let defaultValues: StripeAddressElementOptions['defaultValues'] = {};
@@ -91,6 +193,9 @@ export class StripeService {
   async createConfirmationToken() {
     const stripe = await this.getStripeInstance();
     const elements = await this.initializeElements();
+    if (!elements) {
+      throw new Error('Payment elements not available');
+    }
     const result = await elements.submit();
     if (result.error) throw new Error(result.error.message);
     if (stripe) {
@@ -100,9 +205,49 @@ export class StripeService {
     }
   }
 
+  async confirmSetupIntent(): Promise<{setupIntent: any, error?: any}> {
+    const stripe = await this.getStripeInstance();
+    const cart = this.cartService.cart();
+    
+    if (!stripe || !cart?.setupClientSecret) {
+      throw new Error('Setup Intent not available');
+    }
+
+    const elements = await this.initializeElements();
+    if (!elements) {
+      throw new Error('Payment elements not available');
+    }
+
+    const result = await elements.submit();
+    if (result.error) {
+      return { setupIntent: null, error: result.error };
+    }
+
+    // Confirm the Setup Intent
+    const confirmResult = await stripe.confirmSetup({
+      elements,
+      clientSecret: cart.setupClientSecret,
+      confirmParams: {
+        return_url: window.location.origin + '/checkout/success'
+      }
+    }) as { setupIntent?: any; error?: any };
+
+    // Handle the union type properly
+    if (confirmResult.error) {
+      return { setupIntent: null, error: confirmResult.error };
+    } else if (confirmResult.setupIntent) {
+      return { setupIntent: confirmResult.setupIntent, error: undefined };
+    } else {
+      return { setupIntent: null, error: { message: 'Unknown error confirming setup intent' } };
+    }
+  }
+
   async confirmPayment(confirmationToken: ConfirmationToken) {
     const stripe = await this.getStripeInstance();
     const elements = await this.initializeElements();
+    if (!elements) {
+      throw new Error('Payment elements not available');
+    }
     const result = await elements.submit();
     if (result.error) throw new Error(result.error.message);
 

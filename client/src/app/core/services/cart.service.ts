@@ -47,6 +47,16 @@ export class CartService {
   getCart(id: string) {
     return this.http.get<Cart>(this.baseUrl + 'cart?id=' + id).pipe(
       map(cart => {
+        // Ensure quantityInStock is set for all items (in case of old cart data)
+        if (cart?.items) {
+          cart.items.forEach(item => {
+            // If quantityInStock is missing or 0, set a default to prevent adding more
+            if (!item.quantityInStock || item.quantityInStock <= 0) {
+              // If quantity is already 1, assume only 1 is available
+              item.quantityInStock = item.quantity || 1;
+            }
+          });
+        }
         this.cart.set(cart);
         return cart;
       })
@@ -70,6 +80,16 @@ export class CartService {
     if (this.isProduct(item)) {
       item = this.mapProductToCartItem(item);
     }
+    
+    // Check stock availability
+    const existingItem = cart.items.find(x => x.productId === item.productId);
+    const currentQuantity = existingItem?.quantity || 0;
+    const requestedQuantity = currentQuantity + quantity;
+    
+    if (requestedQuantity > item.quantityInStock) {
+      throw new Error(`Only ${item.quantityInStock} item(s) available in stock. Cannot add more.`);
+    }
+    
     cart.items = this.addOrUpdateItem(cart.items, item, quantity);
     await firstValueFrom(this.setCart(cart));
   }
@@ -107,9 +127,29 @@ async removeItemFromCart(productId: number, quantity = 1) {
       item.quantity = quantity;
       items.push(item);
     } else {
-      items[index].quantity += quantity
+      const newQuantity = items[index].quantity + quantity;
+      // Preserve quantityInStock from existing item if it exists, otherwise use from new item
+      const stockLimit = items[index].quantityInStock || item.quantityInStock;
+      // Double-check stock limit (should already be checked in addItemToCart, but safety check)
+      if (newQuantity > stockLimit) {
+        items[index].quantity = stockLimit;
+      } else {
+        items[index].quantity = newQuantity;
+      }
+      // Ensure quantityInStock is preserved/updated
+      if (item.quantityInStock) {
+        items[index].quantityInStock = item.quantityInStock;
+      }
     }
     return items;
+  }
+  
+  canAddToCart(product: Product, quantityToAdd: number = 1): boolean {
+    const cart = this.cart();
+    const existingItem = cart?.items.find(x => x.productId === product.id);
+    const currentQuantity = existingItem?.quantity || 0;
+    const requestedQuantity = currentQuantity + quantityToAdd;
+    return requestedQuantity <= product.quantityInStock;
   }
 
   private mapProductToCartItem(item: Product): CartItem {
