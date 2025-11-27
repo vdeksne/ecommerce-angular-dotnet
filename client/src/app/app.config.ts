@@ -9,6 +9,7 @@ import { loadingInterceptor } from './core/interceptors/loading.interceptor';
 import { InitService } from './core/services/init.service';
 import { lastValueFrom } from 'rxjs';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
+import { apiUrlInterceptor } from './core/interceptors/api-url.interceptor';
 
 function initializeApp(initService: InitService) {
   return () => lastValueFrom(initService.init()).finally(() => {
@@ -25,6 +26,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes), 
     provideAnimationsAsync(),
     provideHttpClient(withInterceptors([
+      apiUrlInterceptor, // Must be first to rewrite URLs
       errorInterceptor, 
       loadingInterceptor,
       authInterceptor

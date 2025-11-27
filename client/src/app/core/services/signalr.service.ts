@@ -7,7 +7,23 @@ import { Order } from '../../shared/models/order';
   providedIn: 'root'
 })
 export class SignalrService {
-  hubUrl = environment.hubUrl;
+  /**
+   * Gets the hub URL based on current hostname (works for both localhost and network IP)
+   */
+  get hubUrl(): string {
+    if (typeof window === 'undefined') {
+      return environment.hubUrl;
+    }
+    
+    const hostname = window.location.hostname;
+    
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+      return 'https://localhost:5001/hub/notifications';
+    }
+    
+    return `https://${hostname}:5001/hub/notifications`;
+  }
+  
   hubConnection?: HubConnection;
   orderSignal = signal<Order | null>(null);
 

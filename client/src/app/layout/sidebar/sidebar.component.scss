@@ -188,27 +188,10 @@
   height: 18px;
 }
 
-// Responsive adjustments
-@media (max-width: 768px) {
+// Responsive adjustments - Hide sidebar on mobile
+@media (max-width: 767px) {
   .sidebar {
-    position: relative;
-    left: auto;
-    top: auto;
-    width: 100%;
-    padding: 20px;
-    background: white;
-    border-bottom: 1px solid #000000;
-  }
-
-  .sidebar-nav {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 16px;
-  }
-
-  .sidebar-account {
-    flex-direction: row;
-    margin-top: 16px;
+    display: none !important; // Completely hide sidebar on mobile
   }
 }
 
