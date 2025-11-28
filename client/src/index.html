@@ -1,20 +1,34 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en" class="custom-theme">
-<head>
-  <meta charset="utf-8">
-  <title>Skinet</title>
-  <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-</head>
-<body>
-  <div id="initial-splash">
-    <div class="flex items-center justify-center h-screen">
-      <div class="splash-text">VICTORIA DEXNE</div>
+  <head>
+    <meta charset="utf-8" />
+    <title>Skinet</title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&family=Nunito+Sans:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <!-- Preload Stripe.js for faster loading -->
+    <link
+      rel="preload"
+      href="https://js.stripe.com/v3"
+      as="script"
+      crossorigin="anonymous"
+    />
+    <link rel="dns-prefetch" href="https://js.stripe.com" />
+  </head>
+  <body>
+    <div id="initial-splash">
+      <div class="flex items-center justify-center h-screen">
+        <div class="splash-text">VICTORIA DEXNE</div>
+      </div>
     </div>
-  </div>
-  <app-root></app-root>
-</body>
+    <app-root></app-root>
+  </body>
 </html>

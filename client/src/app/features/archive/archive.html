@@ -2,7 +2,11 @@
   <div class="archive-background">
     <!-- Main Image -->
     @if (selectedMainImage) {
-    <div class="main-image-container">
+    <div 
+      class="main-image-container"
+      (mouseenter)="pauseAutoplay()"
+      (mouseleave)="resumeAutoplay()"
+    >
       @if (canNavigate()) {
       <button
         mat-icon-button

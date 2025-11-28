@@ -52,6 +52,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { getImageUrl } from '../../shared/utils/image-url.util';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-admin',
@@ -77,6 +78,7 @@ import { getImageUrl } from '../../shared/utils/image-url.util';
     MatError,
     MatCheckboxModule,
     DragDropModule,
+    FormsModule,
   ],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.scss',
@@ -244,6 +246,25 @@ export class AdminComponent implements OnInit {
   uploadingArchiveImage = false;
   isDraggingImage = false;
 
+  // Homepage image management properties
+  homePageImageUrl: string = '';
+  homePageObjectPositionX: number = 50;
+  homePageObjectPositionY: number = 50;
+  selectedHomePageFile: File | null = null;
+  homePageImagePreview: string | null = null;
+  uploadingHomePageImage = false;
+
+  // Context page management properties
+  contextSectionTitle: string = '';
+  contextSectionText: string = '';
+  contextImageUrl: string = '';
+  contextObjectPositionX: number = 50;
+  contextObjectPositionY: number = 50;
+  selectedContextFile: File | null = null;
+  contextImagePreview: string | null = null;
+  uploadingContextImage = false;
+  savingContextPage = false;
+
   // Format slider label
   formatLabel(value: number): string {
     return `${value}%`;
@@ -339,6 +360,8 @@ export class AdminComponent implements OnInit {
     this.initProductForm();
     this.loadArchiveImages();
     this.initArchiveForm();
+    this.loadHomePageImage();
+    this.loadContextPage();
   }
 
   loadOrders() {
@@ -1436,5 +1459,326 @@ export class AdminComponent implements OnInit {
       ) as HTMLInputElement;
       if (fileInput) fileInput.value = '';
     }, 0);
+  }
+
+  // Homepage image management methods
+  loadHomePageImage() {
+    this.adminService.getHomePageImage().subscribe({
+      next: (response) => {
+        // Filter out invalid localhost:3845 URLs
+        if (
+          response.imageUrl &&
+          !response.imageUrl.includes('localhost:3845')
+        ) {
+          this.homePageImageUrl = getImageUrl(response.imageUrl);
+        } else {
+          this.homePageImageUrl = '';
+        }
+        this.homePageObjectPositionX = response.objectPositionX ?? 50;
+        this.homePageObjectPositionY = response.objectPositionY ?? 50;
+      },
+      error: (err) => {
+        console.error('Failed to load homepage image:', err);
+        this.homePageImageUrl = '';
+        this.homePageObjectPositionX = 50;
+        this.homePageObjectPositionY = 50;
+      },
+    });
+  }
+
+  selectHomePageImageFile() {
+    const fileInput = document.getElementById(
+      'homePageImageFileInput'
+    ) as HTMLInputElement;
+    if (fileInput) {
+      fileInput.click();
+    }
+  }
+
+  onHomePageFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+
+    this.selectedHomePageFile = file;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      this.homePageImagePreview = e.target?.result as string;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  uploadHomePageImage() {
+    if (!this.selectedHomePageFile) {
+      this.snackbar.error('Please select an image file');
+      return;
+    }
+
+    this.uploadingHomePageImage = true;
+    this.adminService.uploadHomePageImage(this.selectedHomePageFile).subscribe({
+      next: (imageUrl) => {
+        const fullImageUrl = getImageUrl(imageUrl);
+        this.homePageImageUrl = fullImageUrl;
+        this.homePageImagePreview = fullImageUrl;
+        this.selectedHomePageFile = null;
+        this.uploadingHomePageImage = false;
+
+        // Automatically save the image with current position values
+        this.adminService
+          .updateHomePageImage(
+            fullImageUrl,
+            this.homePageObjectPositionX,
+            this.homePageObjectPositionY
+          )
+          .subscribe({
+            next: () => {
+              this.snackbar.success('Image uploaded and saved successfully');
+            },
+            error: (err) => {
+              console.error('Save error:', err);
+              this.snackbar.warning(
+                'Image uploaded but failed to save position'
+              );
+            },
+          });
+      },
+      error: (err) => {
+        console.error('Upload error:', err);
+        this.snackbar.error('Failed to upload image');
+        this.uploadingHomePageImage = false;
+      },
+    });
+  }
+
+  clearHomePageImageSelection() {
+    this.selectedHomePageFile = null;
+    this.homePageImagePreview = null;
+    setTimeout(() => {
+      const fileInput = document.getElementById(
+        'homePageImageFileInput'
+      ) as HTMLInputElement;
+      if (fileInput) fileInput.value = '';
+    }, 0);
+  }
+
+  saveHomePageImage() {
+    if (!this.homePageImageUrl) {
+      this.snackbar.error('Please provide an image URL');
+      return;
+    }
+
+    this.adminService
+      .updateHomePageImage(
+        this.homePageImageUrl,
+        this.homePageObjectPositionX,
+        this.homePageObjectPositionY
+      )
+      .subscribe({
+        next: () => {
+          this.snackbar.success('Homepage image updated successfully');
+          this.homePageImagePreview = null;
+        },
+        error: (err) => {
+          console.error('Update error:', err);
+          this.snackbar.error('Failed to update homepage image');
+        },
+      });
+  }
+
+  onHomePagePositionXChange(event: Event) {
+    const value = parseFloat((event.target as HTMLInputElement).value);
+    this.homePageObjectPositionX = Math.round(value);
+  }
+
+  onHomePagePositionYChange(event: Event) {
+    const value = parseFloat((event.target as HTMLInputElement).value);
+    this.homePageObjectPositionY = Math.round(value);
+  }
+
+  resetHomePagePosition() {
+    this.homePageObjectPositionX = 50;
+    this.homePageObjectPositionY = 50;
+  }
+
+  onHomePageImageError(event: Event) {
+    const img = event.target as HTMLImageElement;
+    // Hide the image on error instead of trying to load an invalid URL
+    img.style.display = 'none';
+  }
+
+  // Context page management methods
+  loadContextPage() {
+    this.adminService.getContextPage().subscribe({
+      next: (response) => {
+        this.contextSectionTitle = response.sectionTitle || '';
+        this.contextSectionText = response.sectionText || '';
+
+        // Filter out invalid localhost:3845 URLs and convert to absolute URL
+        if (
+          response.imageUrl &&
+          !response.imageUrl.includes('localhost:3845')
+        ) {
+          this.contextImageUrl = getImageUrl(response.imageUrl);
+        } else {
+          this.contextImageUrl = '';
+        }
+
+        this.contextObjectPositionX = response.objectPositionX ?? 50;
+        this.contextObjectPositionY = response.objectPositionY ?? 50;
+      },
+      error: (err) => {
+        console.error('Failed to load context page:', err);
+        console.error('Error details:', {
+          status: err.status,
+          statusText: err.statusText,
+          message: err.message,
+          error: err.error,
+        });
+        // Use default values on error
+        this.contextSectionTitle = 'A Period of Juvenile Prosperity';
+        this.contextSectionText =
+          'At the age of 17, Mike Brodie hopped his first train close to home in Pensacola, Florida, thinking he would visit a friend in Mobile, Alabama. Instead, the train took him in the opposite direction to Jacksonville, Florida. Days later he rode the same train home, arriving back where he started.\n\nNonetheless, it sparked something in him and he began to wander across America by any means that were free - walking, hitchhiking, and train hopping. Shortly after his travels began he found a camera stuffed behind a car seat and began to take pictures. Brodie spent years crisscrossing the U.S., documenting his experiences, now appreciated as one of the most impressive archives of American travel photography.\n\nA Period of Juvenile Prosperity was named the best exhibition of the year by Vince Aletti in Artforum; and cited as one of the best photo books of 2013 by The Guardian, The New York Times, The Telegraph, and American Photo; it was short-listed for the Paris Photo/Aperture Foundation First PhotoBook Award.';
+        this.contextImageUrl = '';
+        this.contextObjectPositionX = 50;
+        this.contextObjectPositionY = 50;
+      },
+    });
+  }
+
+  selectContextImageFile() {
+    const fileInput = document.getElementById(
+      'contextImageFileInput'
+    ) as HTMLInputElement;
+    if (fileInput) {
+      fileInput.click();
+    }
+  }
+
+  onContextFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+
+    this.selectedContextFile = file;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      this.contextImagePreview = e.target?.result as string;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  uploadContextImage() {
+    if (!this.selectedContextFile) {
+      this.snackbar.error('Please select an image file');
+      return;
+    }
+
+    console.log('Starting context image upload...');
+    console.log(
+      'File:',
+      this.selectedContextFile.name,
+      this.selectedContextFile.size,
+      'bytes'
+    );
+
+    this.uploadingContextImage = true;
+    this.adminService.uploadContextImage(this.selectedContextFile).subscribe({
+      next: (imageUrl) => {
+        console.log('Upload successful, received URL:', imageUrl);
+        const fullImageUrl = getImageUrl(imageUrl);
+        this.contextImageUrl = fullImageUrl;
+        this.contextImagePreview = fullImageUrl;
+        this.selectedContextFile = null;
+        this.uploadingContextImage = false;
+        this.snackbar.success('Image uploaded successfully');
+      },
+      error: (err) => {
+        console.error('Upload error:', err);
+        console.error('Error details:', {
+          status: err.status,
+          statusText: err.statusText,
+          message: err.message,
+          error: err.error,
+          url: err.url,
+        });
+        const errorMessage =
+          err.error?.message || err.message || 'Failed to upload image';
+        this.snackbar.error(errorMessage);
+        this.uploadingContextImage = false;
+      },
+    });
+  }
+
+  clearContextImageSelection() {
+    this.selectedContextFile = null;
+    this.contextImagePreview = null;
+    setTimeout(() => {
+      const fileInput = document.getElementById(
+        'contextImageFileInput'
+      ) as HTMLInputElement;
+      if (fileInput) fileInput.value = '';
+    }, 0);
+  }
+
+  saveContextPage() {
+    // Convert absolute URL back to relative path if needed for storage
+    let imageUrlToSave = this.contextImageUrl;
+    if (imageUrlToSave && imageUrlToSave.includes('/images/')) {
+      // Extract the relative path from absolute URL
+      const match = imageUrlToSave.match(/\/images\/[^?]+/);
+      if (match) {
+        imageUrlToSave = match[0];
+      }
+    }
+
+    this.savingContextPage = true;
+    this.adminService
+      .updateContextPage(
+        this.contextSectionTitle,
+        this.contextSectionText,
+        imageUrlToSave,
+        this.contextObjectPositionX,
+        this.contextObjectPositionY
+      )
+      .subscribe({
+        next: () => {
+          this.snackbar.success('Context page updated successfully');
+          this.contextImagePreview = null;
+          this.savingContextPage = false;
+        },
+        error: (err) => {
+          console.error('Update error:', err);
+          console.error('Error details:', {
+            status: err.status,
+            statusText: err.statusText,
+            message: err.message,
+            error: err.error,
+          });
+          this.snackbar.error('Failed to update context page');
+          this.savingContextPage = false;
+        },
+      });
+  }
+
+  onContextPositionXChange(event: Event) {
+    const value = parseFloat((event.target as HTMLInputElement).value);
+    this.contextObjectPositionX = Math.round(value);
+  }
+
+  onContextPositionYChange(event: Event) {
+    const value = parseFloat((event.target as HTMLInputElement).value);
+    this.contextObjectPositionY = Math.round(value);
+  }
+
+  resetContextPosition() {
+    this.contextObjectPositionX = 50;
+    this.contextObjectPositionY = 50;
+  }
+
+  onContextImageError(event: Event) {
+    const img = event.target as HTMLImageElement;
+    img.style.display = 'none';
   }
 }

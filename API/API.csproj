@@ -17,4 +17,11 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="Infrastructure.Tests/**" />
+    <Content Remove="Infrastructure.Tests/**" />
+    <EmbeddedResource Remove="Infrastructure.Tests/**" />
+    <None Remove="Infrastructure.Tests/**" />
+  </ItemGroup>
+
 </Project>

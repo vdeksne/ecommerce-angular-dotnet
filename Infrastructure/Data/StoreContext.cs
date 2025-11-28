@@ -14,6 +14,8 @@ public class StoreContext(DbContextOptions options) : IdentityDbContext<AppUser>
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderItem> OrderItems { get; set; }
     public DbSet<ArchiveImage> ArchiveImages { get; set; }
+    public DbSet<HomePageSettings> HomePageSettings { get; set; }
+    public DbSet<ContextPageSettings> ContextPageSettings { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

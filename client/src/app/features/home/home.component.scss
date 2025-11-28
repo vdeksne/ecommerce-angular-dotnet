@@ -8,9 +8,9 @@
 .home-background {
   position: relative;
   width: 100%;
-  min-height: 1080px;
   background: white;
   padding-top: 116px; // Account for header
+  padding-bottom: 40px;
 }
 
 // Main Image Container
@@ -18,37 +18,58 @@
   position: relative;
   width: 100%;
   max-width: 1202px;
-  height: 793px;
   margin: 0 auto;
   margin-top: 0;
+  aspect-ratio: 1202 / 793;
+  padding: 0 20px;
 }
 
 .image-wrapper {
-  position: absolute;
-  inset: 0;
+  position: relative;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
   pointer-events: none;
 }
 
 .main-image {
-  position: absolute;
-  left: 0;
-  top: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
+}
+
+.main-image-placeholder {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f5f5;
+  color: #666;
+  font-family: "Nunito Sans", sans-serif;
+  font-size: 14px;
+  text-align: center;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 // Image Caption
 .image-caption {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 948px;
+  position: relative;
   width: 100%;
   max-width: 1202px;
-  // padding: 0 63px;
+  margin: 30px auto 0;
+  padding: 0 20px;
   box-sizing: border-box;
+  text-align: left;
+
+  // Align caption left edge with image container left edge
+  @media (min-width: 1441px) {
+    padding-left: 20px;
+  }
 }
 
 .image-caption p {
@@ -60,6 +81,7 @@
   text-transform: uppercase;
   color: #000000;
   margin: 0;
+  text-align: left;
 }
 
 .caption-link {
@@ -75,40 +97,85 @@
 }
 
 // Responsive adjustments
-@media (max-width: 1920px) {
-  .home-background {
-    padding-left: 63px;
-    padding-right: 63px;
-  }
-
+@media (max-width: 1440px) {
   .main-image-container {
-    width: calc(100% - 126px);
+    max-width: calc(100% - 40px);
+    padding: 0 20px;
   }
 
   .image-caption {
-    padding: 0;
+    padding: 0 20px;
+    text-align: left;
+  }
+}
+
+@media (max-width: 1024px) {
+  .home-background {
+    padding-top: 100px;
+  }
+
+  .main-image-container {
+    max-width: calc(100% - 40px);
+    padding: 0 20px;
+  }
+
+  .image-caption {
+    margin-top: 25px;
+    padding: 0 20px;
+    text-align: left;
   }
 }
 
 @media (max-width: 768px) {
   .home-background {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-top: 80px;
+    padding-bottom: 30px;
   }
 
   .main-image-container {
-    height: auto;
-    aspect-ratio: 1202 / 793;
-    width: calc(100% - 40px);
+    max-width: 100%;
+    padding: 0 15px;
+    aspect-ratio: 16 / 10; // Slightly different ratio for mobile
   }
 
   .image-caption {
-    position: relative;
-    left: auto;
-    transform: none;
-    top: auto;
     margin-top: 20px;
-    padding: 0 20px;
-    margin-bottom: 20px;
+    padding: 0 15px;
+    text-align: left;
+  }
+
+  .image-caption p {
+    font-size: 10px;
+    line-height: 12px;
+    text-align: left;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-background {
+    padding-top: 70px;
+    padding-bottom: 20px;
+  }
+
+  .main-image-container {
+    padding: 0 10px;
+    aspect-ratio: 4 / 3; // More square for very small screens
+  }
+
+  .image-caption {
+    margin-top: 15px;
+    padding: 0 10px;
+    text-align: left;
+  }
+
+  .image-caption p {
+    font-size: 9px;
+    line-height: 11px;
+    text-align: left;
+  }
+
+  .main-image-placeholder {
+    min-height: 300px;
+    font-size: 12px;
   }
 }

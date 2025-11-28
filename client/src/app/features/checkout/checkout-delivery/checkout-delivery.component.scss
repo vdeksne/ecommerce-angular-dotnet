@@ -1,3 +1,93 @@
+// Delivery container
+.delivery-container {
+  width: 100%;
+}
+
+.delivery-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  @media (max-width: 480px) {
+    gap: 10px;
+  }
+}
+
+.delivery-option {
+  padding: 16px;
+  border: 1px solid black;
+  cursor: pointer;
+  width: 100%;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  font-family: "Nunito Sans", sans-serif;
+  color: black;
+  border-color: black !important;
+  box-sizing: border-box;
+  transition: background-color 0.2s ease;
+
+  @media (max-width: 768px) {
+    padding: 14px;
+    min-height: 70px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 12px;
+    min-height: 60px;
+  }
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.05) !important;
+  }
+}
+
+.delivery-option-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 6px;
+
+  @media (max-width: 480px) {
+    gap: 4px;
+  }
+}
+
+.delivery-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: black;
+  font-family: "Nunito Sans", sans-serif;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 13px;
+  }
+}
+
+.delivery-description {
+  font-size: 13px;
+  color: #666666;
+  font-family: "Nunito Sans", sans-serif;
+  line-height: 1.4;
+
+  @media (max-width: 768px) {
+    font-size: 12px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 11px;
+  }
+}
+
 // Override Material radio button styles for black and white theme
 ::ng-deep {
   .mat-mdc-radio-button {
@@ -13,7 +103,8 @@
         }
       }
 
-      .mdc-radio__native-control:enabled:not(:checked) + .mdc-radio__background {
+      .mdc-radio__native-control:enabled:not(:checked)
+        + .mdc-radio__background {
         .mdc-radio__outer-circle {
           border-color: black !important;
         }
@@ -22,18 +113,7 @@
 
     .mdc-form-field__label {
       color: black !important;
-      font-family: 'Nunito Sans', sans-serif !important;
+      font-family: "Nunito Sans", sans-serif !important;
     }
   }
 }
-
-label {
-  font-family: 'Nunito Sans', sans-serif;
-  color: black;
-  border-color: black !important;
-
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.05) !important;
-  }
-}
-

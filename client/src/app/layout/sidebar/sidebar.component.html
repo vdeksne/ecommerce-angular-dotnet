@@ -10,7 +10,7 @@
     <a routerLink="/test-error" routerLinkActive="active" class="nav-link"
       >Errors</a
     >
-    @if (accountService.isAdmin()) {
+    @if (accountService.currentUser()) {
     <a routerLink="/admin" routerLinkActive="active" class="nav-link">Admin</a>
     }
   </nav>

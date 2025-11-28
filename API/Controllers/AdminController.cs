@@ -122,9 +122,207 @@ public class AdminController(IUnitOfWork unit, IPaymentService paymentService, U
 
         return BadRequest(new { errors = result.Errors });
     }
+
+    [HttpGet("homepage-image")]
+    public async Task<ActionResult<HomePageImageResponseDto>> GetHomePageImage()
+    {
+        try
+        {
+            var settings = await unit.Repository<HomePageSettings>().GetByIdAsync(1);
+            if (settings == null || string.IsNullOrEmpty(settings.MainImageUrl))
+            {
+                // Return JSON object with empty string
+                return Ok(new HomePageImageResponseDto 
+                { 
+                    ImageUrl = "", 
+                    ObjectPositionX = 50, 
+                    ObjectPositionY = 50 
+                });
+            }
+
+            // If URL is the old localhost:3845, return empty to use default
+            if (settings.MainImageUrl.Contains("localhost:3845"))
+            {
+                return Ok(new HomePageImageResponseDto 
+                { 
+                    ImageUrl = "", 
+                    ObjectPositionX = 50, 
+                    ObjectPositionY = 50 
+                });
+            }
+
+            return Ok(new HomePageImageResponseDto 
+            { 
+                ImageUrl = settings.MainImageUrl,
+                ObjectPositionX = settings.ObjectPositionX,
+                ObjectPositionY = settings.ObjectPositionY
+            });
+        }
+        catch (Exception ex)
+        {
+            // Log error and return empty string to use default fallback
+            Console.WriteLine($"Error loading homepage image: {ex.Message}");
+            return Ok(new HomePageImageResponseDto 
+            { 
+                ImageUrl = "", 
+                ObjectPositionX = 50, 
+                ObjectPositionY = 50 
+            });
+        }
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpPut("homepage-image")]
+    public async Task<ActionResult> UpdateHomePageImage([FromBody] UpdateHomePageImageDto dto)
+    {
+        var settings = await unit.Repository<HomePageSettings>().GetByIdAsync(1);
+        if (settings == null)
+        {
+            // Create new settings if they don't exist
+            settings = new HomePageSettings
+            {
+                Id = 1,
+                MainImageUrl = dto.ImageUrl,
+                ObjectPositionX = dto.ObjectPositionX ?? 50,
+                ObjectPositionY = dto.ObjectPositionY ?? 50
+            };
+            unit.Repository<HomePageSettings>().Add(settings);
+        }
+        else
+        {
+            settings.MainImageUrl = dto.ImageUrl;
+            if (dto.ObjectPositionX.HasValue) settings.ObjectPositionX = dto.ObjectPositionX.Value;
+            if (dto.ObjectPositionY.HasValue) settings.ObjectPositionY = dto.ObjectPositionY.Value;
+            unit.Repository<HomePageSettings>().Update(settings);
+        }
+
+        if (await unit.Complete())
+        {
+            return Ok(new { message = "Homepage image updated successfully", imageUrl = settings.MainImageUrl });
+        }
+
+        return BadRequest("Problem updating homepage image");
+    }
+
+    [HttpGet("context-page")]
+    public async Task<ActionResult<ContextPageResponseDto>> GetContextPage()
+    {
+        try
+        {
+            var settings = await unit.Repository<ContextPageSettings>().GetByIdAsync(1);
+            if (settings == null)
+            {
+                return Ok(new ContextPageResponseDto
+                {
+                    SectionTitle = "",
+                    SectionText = "",
+                    ImageUrl = "",
+                    ObjectPositionX = 50,
+                    ObjectPositionY = 50
+                });
+            }
+
+            // Filter out invalid localhost:3845 URLs
+            var imageUrl = settings.ImageUrl ?? "";
+            if (!string.IsNullOrEmpty(imageUrl) && imageUrl.Contains("localhost:3845"))
+            {
+                imageUrl = "";
+            }
+
+            return Ok(new ContextPageResponseDto
+            {
+                SectionTitle = settings.SectionTitle ?? "",
+                SectionText = settings.SectionText ?? "",
+                ImageUrl = imageUrl,
+                ObjectPositionX = settings.ObjectPositionX,
+                ObjectPositionY = settings.ObjectPositionY
+            });
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading context page: {ex.Message}");
+            Console.WriteLine($"Stack trace: {ex.StackTrace}");
+            return Ok(new ContextPageResponseDto
+            {
+                SectionTitle = "",
+                SectionText = "",
+                ImageUrl = "",
+                ObjectPositionX = 50,
+                ObjectPositionY = 50
+            });
+        }
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpPut("context-page")]
+    public async Task<ActionResult> UpdateContextPage([FromBody] UpdateContextPageDto dto)
+    {
+        var settings = await unit.Repository<ContextPageSettings>().GetByIdAsync(1);
+        if (settings == null)
+        {
+            settings = new ContextPageSettings
+            {
+                Id = 1,
+                SectionTitle = dto.SectionTitle ?? "",
+                SectionText = dto.SectionText ?? "",
+                ImageUrl = dto.ImageUrl ?? "",
+                ObjectPositionX = dto.ObjectPositionX ?? 50,
+                ObjectPositionY = dto.ObjectPositionY ?? 50
+            };
+            unit.Repository<ContextPageSettings>().Add(settings);
+        }
+        else
+        {
+            if (dto.SectionTitle != null) settings.SectionTitle = dto.SectionTitle;
+            if (dto.SectionText != null) settings.SectionText = dto.SectionText;
+            if (dto.ImageUrl != null) settings.ImageUrl = dto.ImageUrl;
+            if (dto.ObjectPositionX.HasValue) settings.ObjectPositionX = dto.ObjectPositionX.Value;
+            if (dto.ObjectPositionY.HasValue) settings.ObjectPositionY = dto.ObjectPositionY.Value;
+            unit.Repository<ContextPageSettings>().Update(settings);
+        }
+
+        if (await unit.Complete())
+        {
+            return Ok(new { message = "Context page updated successfully" });
+        }
+
+        return BadRequest("Problem updating context page");
+    }
 }
 
 public class AssignRoleDto
 {
     public required string Email { get; set; }
+}
+
+public class UpdateHomePageImageDto
+{
+    public required string ImageUrl { get; set; }
+    public int? ObjectPositionX { get; set; }
+    public int? ObjectPositionY { get; set; }
+}
+
+public class HomePageImageResponseDto
+{
+    public string ImageUrl { get; set; } = string.Empty;
+    public int ObjectPositionX { get; set; } = 50;
+    public int ObjectPositionY { get; set; } = 50;
+}
+
+public class UpdateContextPageDto
+{
+    public string? SectionTitle { get; set; }
+    public string? SectionText { get; set; }
+    public string? ImageUrl { get; set; }
+    public int? ObjectPositionX { get; set; }
+    public int? ObjectPositionY { get; set; }
+}
+
+public class ContextPageResponseDto
+{
+    public string SectionTitle { get; set; } = string.Empty;
+    public string SectionText { get; set; } = string.Empty;
+    public string ImageUrl { get; set; } = string.Empty;
+    public int ObjectPositionX { get; set; } = 50;
+    public int ObjectPositionY { get; set; } = 50;
 }

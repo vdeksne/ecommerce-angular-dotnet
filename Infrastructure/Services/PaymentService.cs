@@ -1,4 +1,4 @@
-﻿using Core.Entities;
+using Core.Entities;
 using Core.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Stripe;
@@ -133,7 +133,7 @@ public class PaymentService : IPaymentService
                     {
                         Amount = total,
                         Currency = "usd",
-                        PaymentMethodTypes = ["card", "apple_pay"]
+                        PaymentMethodTypes = ["card"] // Card payments only - Apple Pay disabled
                     };
                     var intent = await service.CreateAsync(options);
                     cart.PaymentIntentId = intent.Id;
@@ -189,7 +189,7 @@ public class PaymentService : IPaymentService
                                 {
                                     Amount = total,
                                     Currency = "usd",
-                                    PaymentMethodTypes = ["card", "apple_pay"]
+                                    PaymentMethodTypes = ["card"] // Card payments only
                                 };
                                 var intent = await service.CreateAsync(createOptions);
                                 cart.PaymentIntentId = intent.Id;
@@ -314,7 +314,7 @@ public class PaymentService : IPaymentService
                 // Create new Setup Intent
                 var options = new SetupIntentCreateOptions
                 {
-                    PaymentMethodTypes = ["card", "apple_pay"],
+                    PaymentMethodTypes = ["card"], // Card payments only
                     Usage = "off_session" // Save for future use
                 };
                 var setupIntent = await service.CreateAsync(options);
@@ -335,7 +335,7 @@ public class PaymentService : IPaymentService
                     cart.SetupIntentId = null;
                     var options = new SetupIntentCreateOptions
                     {
-                        PaymentMethodTypes = ["card", "apple_pay"],
+                        PaymentMethodTypes = ["card"], // Card payments only
                         Usage = "off_session"
                     };
                     var setupIntent = await service.CreateAsync(options);

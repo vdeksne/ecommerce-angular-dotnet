@@ -1,3 +1,207 @@
+// Checkout review responsive styles
+.review-section {
+  margin-top: 16px;
+  width: 100%;
+
+  @media (max-width: 768px) {
+    margin-top: 12px;
+  }
+}
+
+.review-title {
+  font-size: 18px;
+  font-weight: 600;
+  font-family: "Nunito Sans", sans-serif;
+  color: #000000;
+  margin-bottom: 16px;
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+}
+
+.review-info {
+  margin: 0;
+  font-family: "Nunito Sans", sans-serif;
+
+  .info-label {
+    font-weight: 500;
+    color: #000000;
+    margin-top: 12px;
+    font-size: 14px;
+
+    @media (max-width: 480px) {
+      font-size: 13px;
+      margin-top: 10px;
+    }
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  .info-value {
+    margin-top: 4px;
+    margin-bottom: 0;
+    color: #666666;
+    font-size: 14px;
+    line-height: 1.5;
+
+    @media (max-width: 480px) {
+      font-size: 13px;
+    }
+  }
+}
+
+.review-items {
+  margin-top: 24px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+
+  @media (max-width: 768px) {
+    margin-top: 20px;
+  }
+
+  @media (max-width: 480px) {
+    margin-top: 16px;
+  }
+}
+
+.items-container {
+  border-bottom: 1px solid #e5e5e5;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.items-table {
+  width: 100%;
+  text-align: center;
+  border-collapse: collapse;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 13px;
+  }
+}
+
+.items-tbody {
+  display: table-row-group;
+}
+
+.item-row {
+  border-bottom: 1px solid #e5e5e5;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.item-info {
+  padding: 16px 8px;
+  text-align: left;
+
+  @media (max-width: 768px) {
+    padding: 12px 6px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 10px 4px;
+  }
+}
+
+.item-details {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  @media (max-width: 768px) {
+    gap: 10px;
+  }
+
+  @media (max-width: 480px) {
+    gap: 8px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.item-image {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  flex-shrink: 0;
+
+  @media (max-width: 768px) {
+    width: 36px;
+    height: 36px;
+  }
+
+  @media (max-width: 480px) {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+.item-name {
+  font-family: "Nunito Sans", sans-serif;
+  color: #000000;
+  font-size: 14px;
+
+  @media (max-width: 768px) {
+    font-size: 13px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 12px;
+    word-break: break-word;
+  }
+}
+
+.item-quantity {
+  padding: 16px 8px;
+  font-family: "Nunito Sans", sans-serif;
+  color: #000000;
+  white-space: nowrap;
+
+  @media (max-width: 768px) {
+    padding: 12px 6px;
+    font-size: 13px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 10px 4px;
+    font-size: 12px;
+  }
+}
+
+.item-price {
+  padding: 16px 8px;
+  text-align: right;
+  font-family: "Nunito Sans", sans-serif;
+  color: #000000;
+  white-space: nowrap;
+
+  @media (max-width: 768px) {
+    padding: 12px 6px;
+    font-size: 13px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 10px 4px;
+    font-size: 12px;
+  }
+}
+
 // Black and white theme for checkout review
 ::ng-deep {
   .mat-mdc-button,
@@ -10,7 +214,7 @@
     color: black !important;
     border: 1px solid black !important;
     background: white !important;
-    font-family: 'Nunito Sans', sans-serif !important;
+    font-family: "Nunito Sans", sans-serif !important;
 
     .mdc-button__ripple {
       display: none !important;
@@ -45,7 +249,7 @@
     --mdc-filled-button-pressed-state-layer-color: transparent !important;
     background-color: black !important;
     color: white !important;
-    font-family: 'Nunito Sans', sans-serif !important;
+    font-family: "Nunito Sans", sans-serif !important;
     border: none !important;
 
     .mdc-button__ripple {
@@ -69,4 +273,3 @@
     }
   }
 }
-

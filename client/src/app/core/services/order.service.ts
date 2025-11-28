@@ -5,7 +5,7 @@ import { Order, OrderToCreate } from '../../shared/models/order';
 import { tap } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class OrderService {
   baseUrl = environment.apiUrl;
@@ -15,7 +15,18 @@ export class OrderService {
 
   createOrder(orderToCreate: OrderToCreate) {
     return this.http.post<Order>(this.baseUrl + 'orders', orderToCreate).pipe(
-      tap(order => {
+      tap((order) => {
+        console.log('Order created and received from backend:', {
+          id: order.id,
+          total: order.total,
+          subtotal: order.subtotal,
+          shippingPrice: order.shippingPrice,
+          discount: order.discount,
+          calculatedTotal:
+            (order.subtotal || 0) -
+            (order.discount || 0) +
+            (order.shippingPrice || 0),
+        });
         this.lastCreatedOrder = order;
         this.orderComplete = true;
       })

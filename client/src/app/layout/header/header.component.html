@@ -13,26 +13,33 @@
     <!-- Right Side Actions -->
     <div class="navbar-actions">
       <!-- Cart (Desktop only) -->
-      <a routerLink="/cart" routerLinkActive="active" class="cart-button desktop-cart">
-        <span class="cart-icon">🛒</span>
+      <a
+        routerLink="/cart"
+        routerLinkActive="active"
+        class="cart-button desktop-cart"
+      >
         <span class="cart-text">Cart</span>
         @if ((cartService.itemCount() ?? 0) > 0) {
-          <span class="cart-badge">{{ cartService.itemCount() }}</span>
+        <span class="cart-badge">{{ cartService.itemCount() }}</span>
         }
       </a>
 
       <!-- User Menu -->
-      @if (accountService.currentUser(); as user) {
-        <button mat-icon-button [matMenuTriggerFor]="userMenu" class="user-menu-button">
-          <span class="user-icon">👤</span>
-        </button>
+      <!-- @if (accountService.currentUser(); as user) {
+      <button
+        mat-icon-button
+        [matMenuTriggerFor]="userMenu"
+        class="user-menu-button"
+      >
+        <span class="user-icon">👤</span>
+      </button>
       } @else {
-        <a routerLink="/account/login" class="login-button">Login</a>
-      }
+      <a routerLink="/account/login" class="login-button">Login</a>
+      } -->
     </div>
 
     <!-- Mobile Menu Button -->
-    <button 
+    <button
       class="mobile-menu-button"
       (click)="toggleMobileMenu()"
       [attr.aria-expanded]="mobileMenuOpen()"
@@ -48,44 +55,78 @@
 
   <!-- Mobile Navigation Menu -->
   <nav class="mobile-nav" [class.open]="mobileMenuOpen()">
-    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="mobile-nav-link" (click)="closeMobileMenu()">
+    <a
+      routerLink="/"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      class="mobile-nav-link"
+      (click)="closeMobileMenu()"
+    >
       Home
     </a>
-    <a routerLink="/archive" routerLinkActive="active" class="mobile-nav-link" (click)="closeMobileMenu()">
+    <a
+      routerLink="/archive"
+      routerLinkActive="active"
+      class="mobile-nav-link"
+      (click)="closeMobileMenu()"
+    >
       Archive
     </a>
-    <a routerLink="/context" routerLinkActive="active" class="mobile-nav-link" (click)="closeMobileMenu()">
+    <a
+      routerLink="/context"
+      routerLinkActive="active"
+      class="mobile-nav-link"
+      (click)="closeMobileMenu()"
+    >
       Context
     </a>
-    <a routerLink="/shop" routerLinkActive="active" class="mobile-nav-link" (click)="closeMobileMenu()">
-      Shop
+    <a
+      routerLink="/shop"
+      routerLinkActive="active"
+      class="mobile-nav-link"
+      (click)="closeMobileMenu()"
+    >
+      Collect
     </a>
-    <a routerLink="/cart" routerLinkActive="active" class="mobile-nav-link" (click)="closeMobileMenu()">
-      Cart
-      @if ((cartService.itemCount() ?? 0) > 0) {
-        <span class="mobile-cart-badge">{{ cartService.itemCount() }}</span>
+    <a
+      routerLink="/cart"
+      routerLinkActive="active"
+      class="mobile-nav-link"
+      (click)="closeMobileMenu()"
+    >
+      Cart @if ((cartService.itemCount() ?? 0) > 0) {
+      <span class="mobile-cart-badge">{{ cartService.itemCount() }}</span>
       }
     </a>
     @if (accountService.currentUser(); as user) {
-      <a routerLink="/orders" routerLinkActive="active" class="mobile-nav-link" (click)="closeMobileMenu()">
-        Orders
-      </a>
-      <button class="mobile-nav-link logout-link" (click)="logout(); closeMobileMenu()">
-        Logout
-      </button>
+    <a
+      routerLink="/orders"
+      routerLinkActive="active"
+      class="mobile-nav-link"
+      (click)="closeMobileMenu()"
+    >
+      Orders
+    </a>
+    <button
+      class="mobile-nav-link logout-link"
+      (click)="logout(); closeMobileMenu()"
+    >
+      Logout
+    </button>
     } @else {
-      <a routerLink="/account/login" class="mobile-nav-link" (click)="closeMobileMenu()">
-        Login
-      </a>
+    <a
+      routerLink="/account/login"
+      class="mobile-nav-link"
+      (click)="closeMobileMenu()"
+    >
+      Login
+    </a>
     }
   </nav>
 </header>
 
 @if (busyService.loading) {
-  <mat-progress-bar
-    mode="indeterminate"
-    class="progress-bar"
-  ></mat-progress-bar>
+<mat-progress-bar mode="indeterminate" class="progress-bar"></mat-progress-bar>
 }
 
 <mat-menu #userMenu="matMenu" class="user-menu">
@@ -97,12 +138,12 @@
     <span class="menu-icon">⚙️</span>
     <span>Account</span>
   </button>
-  @if (accountService.isAdmin()) {
-    <mat-divider></mat-divider>
-    <button mat-menu-item routerLink="/admin">
-      <span class="menu-icon">🔧</span>
-      <span>Admin</span>
-    </button>
+  @if (accountService.currentUser()) {
+  <mat-divider></mat-divider>
+  <button mat-menu-item routerLink="/admin">
+    <span class="menu-icon">🔧</span>
+    <span>Admin</span>
+  </button>
   }
   <mat-divider></mat-divider>
   <button mat-menu-item (click)="logout()">

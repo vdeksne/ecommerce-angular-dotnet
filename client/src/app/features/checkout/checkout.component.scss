@@ -1,9 +1,115 @@
+// Checkout container layout
+.checkout-container {
+  display: flex;
+  gap: 24px;
+  margin-top: 116px; // Account for header
+  padding: 0 20px;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    gap: 20px;
+    padding: 0 16px;
+    margin-top: 100px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0 12px;
+    margin-top: 80px;
+    gap: 16px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0 8px;
+    margin-top: 70px;
+    gap: 12px;
+  }
+}
+
+.checkout-main {
+  flex: 1;
+  min-width: 0; // Allow flex item to shrink below content size
+
+  @media (max-width: 1024px) {
+    width: 100%;
+  }
+}
+
+.checkout-sidebar {
+  width: 320px;
+  flex-shrink: 0;
+
+  @media (max-width: 1024px) {
+    width: 100%;
+    order: -1; // Show order summary first on mobile
+  }
+}
+
+.checkout-stepper {
+  background: white;
+  border: 1px solid #e5e5e5;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  padding: 24px;
+  box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    padding: 16px;
+    border: none;
+    box-shadow: none;
+  }
+
+  @media (max-width: 480px) {
+    padding: 12px;
+  }
+}
+
+.step-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 24px;
+  gap: 12px;
+
+  @media (max-width: 480px) {
+    flex-direction: column-reverse;
+    width: 100%;
+    margin-top: 20px;
+    gap: 8px;
+
+    button {
+      width: 100%;
+    }
+  }
+}
+
+.save-address-checkbox {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+
+  @media (max-width: 480px) {
+    justify-content: flex-start;
+  }
+}
+
 // Override Material Design components to use black and white theme
 ::ng-deep {
   // Stepper styles
   .mat-step-header {
     background-color: transparent !important;
-    
+    padding: 12px 8px;
+
+    @media (max-width: 768px) {
+      padding: 8px 4px;
+    }
+
+    @media (max-width: 480px) {
+      padding: 6px 2px;
+    }
+
     .mat-step-icon-selected {
       background-color: black !important;
       color: white !important;
@@ -22,7 +128,17 @@
 
     .mat-step-label {
       color: black !important;
-      font-family: 'Nunito Sans', sans-serif !important;
+      font-family: "Nunito Sans", sans-serif !important;
+      font-size: 14px;
+
+      @media (max-width: 768px) {
+        font-size: 12px;
+      }
+
+      @media (max-width: 480px) {
+        font-size: 11px;
+        padding: 0 4px;
+      }
     }
 
     .mat-step-label-selected {
@@ -32,6 +148,18 @@
 
     .mat-step-icon {
       border-color: black !important;
+      width: 32px;
+      height: 32px;
+
+      @media (max-width: 768px) {
+        width: 28px;
+        height: 28px;
+      }
+
+      @media (max-width: 480px) {
+        width: 24px;
+        height: 24px;
+      }
     }
 
     &:hover {
@@ -61,6 +189,15 @@
 
   .mat-stepper-horizontal-line {
     border-top-color: black !important;
+    margin: 0 8px;
+
+    @media (max-width: 768px) {
+      margin: 0 4px;
+    }
+
+    @media (max-width: 480px) {
+      margin: 0 2px;
+    }
   }
 
   .mat-stepper-vertical-line {
@@ -77,8 +214,16 @@
     --mdc-filled-button-pressed-state-layer-color: transparent !important;
     background-color: black !important;
     color: white !important;
-    font-family: 'Nunito Sans', sans-serif !important;
+    font-family: "Nunito Sans", sans-serif !important;
     border: none !important;
+    min-height: 44px; // Better touch target on mobile
+    padding: 0 24px;
+
+    @media (max-width: 480px) {
+      min-height: 48px;
+      padding: 0 20px;
+      font-size: 14px;
+    }
 
     .mdc-button__ripple {
       display: none !important;
@@ -126,7 +271,15 @@
     color: black !important;
     border: 1px solid black !important;
     background: white !important;
-    font-family: 'Nunito Sans', sans-serif !important;
+    font-family: "Nunito Sans", sans-serif !important;
+    min-height: 44px; // Better touch target on mobile
+    padding: 0 24px;
+
+    @media (max-width: 480px) {
+      min-height: 48px;
+      padding: 0 20px;
+      font-size: 14px;
+    }
 
     .mdc-button__ripple {
       display: none !important;
@@ -170,6 +323,13 @@
 
   // Form fields
   .mat-mdc-form-field {
+    width: 100%;
+    margin-bottom: 16px;
+
+    @media (max-width: 480px) {
+      margin-bottom: 12px;
+    }
+
     .mat-mdc-text-field-wrapper {
       border: 1px solid black;
       background-color: transparent !important;
@@ -177,13 +337,18 @@
 
     .mat-mdc-form-field-input-control input {
       color: black !important;
-      font-family: 'Nunito Sans', sans-serif !important;
+      font-family: "Nunito Sans", sans-serif !important;
       background-color: transparent !important;
+      font-size: 16px; // Prevent zoom on iOS
+
+      @media (max-width: 480px) {
+        font-size: 16px;
+      }
     }
 
     .mat-mdc-form-field-label {
       color: black !important;
-      font-family: 'Nunito Sans', sans-serif !important;
+      font-family: "Nunito Sans", sans-serif !important;
     }
 
     .mat-mdc-form-field-focus-overlay {
@@ -227,17 +392,21 @@
         display: none !important;
       }
 
-      .mdc-checkbox__native-control:enabled:checked ~ .mdc-checkbox__background {
+      .mdc-checkbox__native-control:enabled:checked
+        ~ .mdc-checkbox__background {
         background-color: black !important;
         border-color: black !important;
       }
 
-      .mdc-checkbox__native-control:enabled:indeterminate ~ .mdc-checkbox__background {
+      .mdc-checkbox__native-control:enabled:indeterminate
+        ~ .mdc-checkbox__background {
         background-color: black !important;
         border-color: black !important;
       }
 
-      .mdc-checkbox__native-control:enabled ~ .mdc-checkbox__background .mdc-checkbox__checkmark {
+      .mdc-checkbox__native-control:enabled
+        ~ .mdc-checkbox__background
+        .mdc-checkbox__checkmark {
         color: white !important;
       }
 
@@ -248,7 +417,7 @@
 
     .mdc-form-field__label {
       color: black !important;
-      font-family: 'Nunito Sans', sans-serif !important;
+      font-family: "Nunito Sans", sans-serif !important;
     }
   }
 
@@ -263,7 +432,7 @@
   // Error messages
   .mat-mdc-form-field-error {
     color: black !important;
-    font-family: 'Nunito Sans', sans-serif !important;
+    font-family: "Nunito Sans", sans-serif !important;
   }
 
   // Remove all focus backgrounds and state layers
@@ -281,7 +450,16 @@
     min-height: 200px; // Ensure container has height
     width: 100%;
     display: block;
-    
+    box-sizing: border-box;
+
+    @media (max-width: 768px) {
+      min-height: 180px;
+    }
+
+    @media (max-width: 480px) {
+      min-height: 160px;
+    }
+
     * {
       &:focus,
       &:focus-visible,
@@ -306,7 +484,7 @@
     .ApplePayButton,
     [id*="apple-pay"],
     iframe[title*="Apple Pay"] {
-      font-family: 'Nunito Sans', sans-serif !important;
+      font-family: "Nunito Sans", sans-serif !important;
       border-radius: 4px !important;
       min-height: 48px !important;
       width: 100% !important;
@@ -332,7 +510,7 @@
     .StripeElement--ApplePay {
       z-index: 10000 !important;
       position: relative !important;
-      
+
       .ApplePayButton {
         min-height: 48px !important;
         width: 100% !important;
@@ -343,7 +521,7 @@
   // Remove all stepper step backgrounds
   .mat-step-header {
     background-color: transparent !important;
-    
+
     &::before,
     &::after {
       display: none !important;
@@ -367,4 +545,3 @@
     background-color: transparent !important;
   }
 }
-

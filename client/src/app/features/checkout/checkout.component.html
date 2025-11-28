@@ -1,10 +1,10 @@
-<div class="flex mt-32 gap-6">
-  <div class="w-3/4">
+<div class="checkout-container">
+  <div class="checkout-main">
     <mat-stepper
       (selectionChange)="onStepChange($event)"
       [linear]="true"
       #stepper
-      class="bg-white border border-gray-200 shadow-sm"
+      class="checkout-stepper"
     >
       <mat-step label="Address" [completed]="completionStatus().address">
         <form [formGroup]="emailForm">
@@ -33,7 +33,7 @@
         </form>
         <div id="address-element"></div>
         @if (isAuthenticated) {
-        <div class="flex justify-end mt-1">
+        <div class="save-address-checkbox">
           <mat-checkbox
             [checked]="saveAddress"
             (change)="onSaveAddressCheckboxChange($event)"
@@ -43,7 +43,7 @@
         </div>
         }
 
-        <div class="flex justify-between mt-6">
+        <div class="step-actions">
           <!-- <button class="z-0" routerLink="/shop" mat-stroked-button>Continue shopping</button> -->
           <button
             [disabled]="!completionStatus().address"
@@ -59,7 +59,7 @@
         <app-checkout-delivery
           (deliveryComplete)="handleDeliveryChange($event)"
         ></app-checkout-delivery>
-        <div class="flex justify-between mt-6">
+        <div class="step-actions">
           <button matStepperPrevious mat-stroked-button>Back</button>
           <button
             [disabled]="!completionStatus().delivery"
@@ -109,14 +109,16 @@
           Click the Apple Pay button above to see a QR code you can scan with
           your iPhone. }
         </p>
-        <div class="flex justify-between mt-6">
+        <div class="step-actions">
           <button matStepperPrevious mat-stroked-button>Back</button>
           <button
-            [disabled]="!completionStatus().card"
-            matStepperNext
+            [disabled]="!completionStatus().card || loading"
+            (click)="onPaymentStepNext(stepper)"
             mat-flat-button
           >
-            Next
+            @if (loading) {
+            <mat-spinner diameter="20"></mat-spinner>
+            } @else { Next }
           </button>
         </div>
       </mat-step>
@@ -151,7 +153,7 @@
           [confirmationToken]="confirmationToken"
           [shippingAddress]="reviewShippingAddress"
         ></app-checkout-review>
-        <div class="flex justify-between mt-6">
+        <div class="step-actions">
           <button matStepperPrevious mat-stroked-button>Back</button>
           <button
             [disabled]="(!isFreeOrder() && !confirmationToken) || loading"
@@ -171,7 +173,7 @@
       </mat-step>
     </mat-stepper>
   </div>
-  <div class="w-1/4">
+  <div class="checkout-sidebar">
     <app-order-summary></app-order-summary>
   </div>
 </div>

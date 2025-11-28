@@ -3,7 +3,18 @@
     <!-- Main Image -->
     <div class="main-image-container">
       <div class="image-wrapper">
-        <img [src]="mainImageUrl" alt="Main Look 5_067" class="main-image" />
+        @if (mainImageUrl) {
+        <img 
+          [src]="mainImageUrl" 
+          alt="Main Look 5_067" 
+          class="main-image"
+          [style.object-position]="objectPositionX + '% ' + objectPositionY + '%'"
+        />
+        } @else {
+        <div class="main-image-placeholder">
+          <p>Homepage image not set. Please upload an image in the Admin panel.</p>
+        </div>
+        }
       </div>
     </div>
 

@@ -1,40 +1,46 @@
-<div class="mt-4 w-full">
-    <h4 class="text-lg font-semibold">Billing and delivery information</h4>
-    <dl>
-        <dt class="font-medium">Shipping address</dt>
-        @if (isFreeOrder() && shippingAddress) {
-        <dd class="mt-1 text-gray-500">{{shippingAddress | address}}</dd>
-        } @else {
-        <dd class="mt-1 text-gray-500">{{confirmationToken?.shipping | address}}</dd>
-        }
-        @if (isFreeOrder()) {
-        <dt class="font-medium">Payment</dt>
-        <dd class="mt-1 text-gray-500">No payment required - Free digital art</dd>
-        } @else {
-        <dt class="font-medium">Payment details</dt>
-        <dd class="mt-1 text-gray-500">{{confirmationToken?.payment_method_preview | paymentCard}}</dd>
-        }
-    </dl>
+<div class="review-section">
+  <h4 class="review-title">Billing and delivery information</h4>
+  <dl class="review-info">
+    <dt class="info-label">Shipping address</dt>
+    @if (shippingAddress) {
+    <dd class="info-value">{{ shippingAddress | address }}</dd>
+    } @else if (confirmationToken?.shipping) {
+    <dd class="info-value">{{ confirmationToken?.shipping | address }}</dd>
+    } @else {
+    <dd class="info-value">Unknown address</dd>
+    } @if (isFreeOrder()) {
+    <dt class="info-label">Payment</dt>
+    <dd class="info-value">No payment required - Free digital art</dd>
+    } @else {
+    <dt class="info-label">Payment details</dt>
+    <dd class="info-value">
+      {{ confirmationToken?.payment_method_preview | paymentCard }}
+    </dd>
+    }
+  </dl>
 </div>
 
-<div class="mt-6 mx-auto">
-    <div class="border-b border-gray-200">
-        <table class="w-full text-center">
-            <tbody class="divide-y divide-gray-200">
-                @for (item of cartService.cart()?.items; track item.productId) {
-                    <tr>
-                        <td class="py-4">
-                            <div class="flex items-center gap-4">
-                                <img src="{{item.pictureUrl}}" alt="product image" 
-                                    class="w-10 h-10">
-                                <span>{{item.productName}}</span>
-                            </div>
-                        </td>
-                        <td class="p-4">x{{item.quantity}}</td>
-                        <td class="p-4 text-right">{{item.price | currency}}</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+<div class="review-items">
+  <div class="items-container">
+    <table class="items-table">
+      <tbody class="items-tbody">
+        @for (item of cartService.cart()?.items; track item.productId) {
+        <tr class="item-row">
+          <td class="item-info">
+            <div class="item-details">
+              <img
+                src="{{ item.pictureUrl }}"
+                alt="product image"
+                class="item-image"
+              />
+              <span class="item-name">{{ item.productName }}</span>
+            </div>
+          </td>
+          <td class="item-quantity">x{{ item.quantity }}</td>
+          <td class="item-price">{{ item.price | currency }}</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
 </div>

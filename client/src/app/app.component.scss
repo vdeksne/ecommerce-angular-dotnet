@@ -22,3 +22,9 @@
     padding-left: 0; // Sidebar becomes horizontal on mobile
   }
 }
+
+@media (min-width: 1000px) {
+  .container {
+    padding-left: 5;
+  }
+}

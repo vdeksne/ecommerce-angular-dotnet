@@ -19,15 +19,32 @@ import { Order } from '../../../shared/models/order';
     DatePipe,
     AddressPipe,
     CurrencyPipe,
-    PaymentCardPipe
+    PaymentCardPipe,
   ],
   templateUrl: './checkout-success.component.html',
-  styleUrl: './checkout-success.component.scss'
+  styleUrl: './checkout-success.component.scss',
 })
 export class CheckoutSuccessComponent implements OnDestroy {
   signalrService = inject(SignalrService);
   private orderService = inject(OrderService);
   order = computed(() => this.orderService.lastCreatedOrder);
+
+  // Calculate order total with fallback if total is missing
+  orderTotal = computed(() => {
+    const currentOrder = this.order();
+    if (!currentOrder) return 0;
+
+    // If total exists and is valid, use it
+    if (currentOrder.total != null && currentOrder.total > 0) {
+      return currentOrder.total;
+    }
+
+    // Otherwise calculate from subtotal, discount, and shipping
+    const subtotal = currentOrder.subtotal || 0;
+    const discount = currentOrder.discount || 0;
+    const shipping = currentOrder.shippingPrice || 0;
+    return subtotal - discount + shipping;
+  });
 
   ngOnDestroy(): void {
     this.orderService.orderComplete = false;

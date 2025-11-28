@@ -1,17 +1,27 @@
 .context-page {
+  position: relative;
   width: 100%;
-  min-height: calc(100vh - 80px);
-  padding-top: 80px;
+  min-height: 100vh;
+  background: white;
+}
+
+.context-background {
+  position: relative;
+  width: 100%;
+  background: white;
+  padding-top: 116px; // Account for header
+  padding-bottom: 80px;
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  background-color: white;
+  flex-direction: column;
+  align-items: center;
 }
 
 .context-container {
+  position: relative;
   width: 100%;
   max-width: 1202px;
-  padding: 63px;
+  margin: 0 auto;
+  padding: 0 63px;
   box-sizing: border-box;
 }
 
@@ -23,26 +33,296 @@
   letter-spacing: 1px;
   text-transform: uppercase;
   color: #000000;
-  margin: 0 0 20px 0;
+  margin: 0 0 50px 0;
 }
 
-.context-description {
+.context-layout {
+  display: flex;
+  gap: 60px;
+  align-items: flex-start;
+  width: 100%;
+
+  // Ensure columns don't get too narrow
+  @media (min-width: 769px) {
+    min-height: 500px;
+  }
+}
+
+.context-content {
+  flex: 1.2; // Slightly more space for text
+  min-width: 0; // Allow text to shrink if needed
+  display: flex;
+  flex-direction: column;
+}
+
+.context-image-container {
+  flex: 1;
+  min-width: 0;
+  aspect-ratio: 1 / 1; // Square aspect ratio
+  flex-shrink: 0;
+  max-width: 100%;
+
+  // Prevent image from being too large on very wide screens
+  @media (min-width: 1400px) {
+    max-width: 500px;
+  }
+}
+
+.context-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.context-image-placeholder {
+  width: 100%;
+  height: 100%;
+  background-color: #d9d9d9; // Grey color matching archive placeholder
+  display: block;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.context-section {
+  margin-bottom: 0;
+  width: 100%;
+}
+
+.section-title {
+  font-family: "Nunito Sans", sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 1.4;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #000000;
+  margin: 0 0 25px 0;
+}
+
+.section-text {
   font-family: "Nunito Sans", sans-serif;
   font-weight: 400;
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 1.75; // Better readability
   color: #000000;
-  margin: 0;
+  text-align: left;
+
+  p {
+    margin: 0 0 24px 0;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    // Handle empty paragraphs (spacers)
+    &:empty,
+    &:has-text("&nbsp;") {
+      margin: 0 0 20px 0;
+      min-height: 20px;
+    }
+  }
 }
 
 // Responsive adjustments
-@media (max-width: 768px) {
+@media (max-width: 1440px) {
   .context-container {
-    padding: 20px;
+    max-width: calc(100% - 126px);
+    padding: 0 63px;
+  }
+
+  .context-layout {
+    gap: 50px;
+  }
+}
+
+@media (max-width: 1280px) {
+  .context-container {
+    padding: 0 50px;
+  }
+
+  .context-layout {
+    gap: 40px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .context-background {
+    padding-top: 100px;
+    padding-bottom: 60px;
+  }
+
+  .context-container {
+    padding: 0 40px;
+  }
+
+  .context-title {
+    font-size: 28px;
+    margin-bottom: 40px;
+  }
+
+  .context-layout {
+    gap: 35px;
+  }
+
+  .section-title {
+    font-size: 20px;
+    margin-bottom: 22px;
+  }
+
+  .section-text {
+    font-size: 15px;
+    line-height: 1.7;
+
+    p {
+      margin-bottom: 20px;
+    }
+  }
+}
+
+@media (max-width: 900px) {
+  .context-layout {
+    gap: 30px;
+  }
+
+  .context-content {
+    flex: 1.1;
+  }
+}
+
+@media (max-width: 768px) {
+  .context-background {
+    padding-top: 80px;
+    padding-bottom: 50px;
+  }
+
+  .context-container {
+    padding: 0 30px;
   }
 
   .context-title {
     font-size: 24px;
+    margin-bottom: 30px;
+  }
+
+  .context-layout {
+    flex-direction: column;
+    gap: 35px;
+    align-items: stretch;
+  }
+
+  .context-image-container {
+    width: 100%;
+    max-width: 100%;
+    order: -1; // Show image first on mobile
+    aspect-ratio: 16 / 9; // Wider on mobile for better use of space
+  }
+
+  .context-content {
+    flex: 1;
+  }
+
+  .section-title {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+
+  .section-text {
+    font-size: 14px;
+    line-height: 1.6;
+
+    p {
+      margin-bottom: 18px;
+    }
   }
 }
 
+@media (max-width: 600px) {
+  .context-container {
+    padding: 0 20px;
+  }
+
+  .context-title {
+    font-size: 22px;
+    margin-bottom: 25px;
+  }
+
+  .context-layout {
+    gap: 30px;
+  }
+
+  .section-title {
+    font-size: 17px;
+    margin-bottom: 18px;
+  }
+
+  .section-text {
+    font-size: 13.5px;
+    line-height: 1.55;
+
+    p {
+      margin-bottom: 16px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .context-background {
+    padding-top: 70px;
+    padding-bottom: 40px;
+  }
+
+  .context-container {
+    padding: 0 15px;
+  }
+
+  .context-title {
+    font-size: 20px;
+    margin-bottom: 25px;
+    letter-spacing: 0.8px;
+  }
+
+  .context-layout {
+    flex-direction: column;
+    gap: 25px;
+  }
+
+  .context-image-container {
+    width: 100%;
+    aspect-ratio: 4 / 3; // More square on very small screens
+  }
+
+  .section-title {
+    font-size: 16px;
+    margin-bottom: 16px;
+    letter-spacing: 0.4px;
+  }
+
+  .section-text {
+    font-size: 13px;
+    line-height: 1.5;
+
+    p {
+      margin-bottom: 14px;
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  .context-container {
+    padding: 0 12px;
+  }
+
+  .context-title {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+
+  .section-title {
+    font-size: 15px;
+  }
+
+  .section-text {
+    font-size: 12px;
+    line-height: 1.45;
+  }
+}

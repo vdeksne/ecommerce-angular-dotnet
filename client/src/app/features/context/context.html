@@ -1,6 +1,41 @@
 <div class="context-page">
-  <div class="context-container">
-    <h1 class="context-title">Context</h1>
-    <p class="context-description">Explore the context and background of our collections.</p>
+  <div class="context-background">
+    <div class="context-container">
+      <!-- Main Title -->
+      <h1 class="context-title">Context</h1>
+
+      <!-- Two Column Layout: Text Left, Image Right -->
+      <div class="context-layout">
+        <!-- Left Column: Text Content -->
+        <div class="context-content">
+          <div class="context-section">
+            <h2 class="section-title">
+              {{ sectionTitle || 'A Period of Juvenile Prosperity' }}
+            </h2>
+            <div class="section-text">
+              @for (paragraph of getParagraphs(); track $index) {
+              <p>{{ paragraph }}</p>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Image -->
+        <div class="context-image-container">
+          @if (imageUrl) {
+          <img
+            [src]="getImageUrl(imageUrl)"
+            alt="Context page image"
+            class="context-image"
+            [style.object-position]="objectPositionX + '% ' + objectPositionY + '%'"
+          />
+          } @else {
+          <div class="context-image-placeholder">
+            <!-- Image will be displayed here when available -->
+          </div>
+          }
+        </div>
+      </div>
+    </div>
   </div>
 </div>

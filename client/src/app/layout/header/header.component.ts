@@ -4,9 +4,8 @@ import { BusyService } from '../../core/services/busy.service';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { CartService } from '../../core/services/cart.service';
 import { AccountService } from '../../core/services/account.service';
-import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { MatMenu, MatMenuItem } from '@angular/material/menu';
 import { MatDivider } from '@angular/material/divider';
-import { MatIconButton } from '@angular/material/button';
 import { filter } from 'rxjs';
 
 @Component({
@@ -18,9 +17,7 @@ import { filter } from 'rxjs';
     MatProgressBar,
     MatMenu,
     MatDivider,
-    MatMenuItem,
-    MatMenuTrigger,
-    MatIconButton
+    MatMenuItem
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'

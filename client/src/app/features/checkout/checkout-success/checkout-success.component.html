@@ -78,7 +78,7 @@
             text-align: right;
           "
         >
-          {{ currentOrder.total | currency }}
+          {{ orderTotal() | currency }}
         </dd>
       </dl>
     </div>
@@ -141,6 +141,6 @@
         View Gallery
       </button>
     </div>
-  </div>    
+  </div>
 </section>
 }
