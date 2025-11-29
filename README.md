@@ -1,5 +1,11 @@
 # Ecommerce Project
 
+![Demo View - Shop Page](assets/demo-view.png)
+
+_Demo view of the shop page showcasing the artwork gallery with navigation menu and shopping cart_
+
+A sophisticated ecommerce platform for digital artwork, combining elegant design with powerful functionality. Seamlessly browse curated collections, secure checkout with Stripe integration, and comprehensive admin tools—all built to let art shine.
+
 This app is built using .NET 9 and Angular 21
 
 # Running the project
