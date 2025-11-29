@@ -24,11 +24,24 @@ public class EmailService : IEmailService
         {
             var smtpHost = _configuration["EmailSettings:SmtpHost"];
             var smtpUsername = _configuration["EmailSettings:SmtpUsername"];
+            var smtpPassword = _configuration["EmailSettings:SmtpPassword"];
 
             // If email settings are not configured, log and skip sending
-            if (string.IsNullOrEmpty(smtpHost) || string.IsNullOrEmpty(smtpUsername))
+            if (string.IsNullOrEmpty(smtpHost))
             {
-                _logger.LogWarning("Email settings not configured. Skipping email send for order #{OrderId}", order.Id);
+                _logger.LogWarning("Email settings not configured: SmtpHost is missing. Skipping email send for order #{OrderId}. Check appsettings.json.", order.Id);
+                return;
+            }
+            
+            if (string.IsNullOrEmpty(smtpUsername))
+            {
+                _logger.LogWarning("Email settings not configured: SmtpUsername is missing. Skipping email send for order #{OrderId}. Please add your email address to EmailSettings:SmtpUsername in appsettings.json.", order.Id);
+                return;
+            }
+            
+            if (string.IsNullOrEmpty(smtpPassword))
+            {
+                _logger.LogWarning("Email settings not configured: SmtpPassword is missing. Skipping email send for order #{OrderId}. Please add your Gmail App Password (not regular password) to EmailSettings:SmtpPassword in appsettings.json. See EMAIL_CONFIGURATION.md for instructions.", order.Id);
                 return;
             }
 
@@ -40,7 +53,6 @@ public class EmailService : IEmailService
             }
 
             var smtpPort = _configuration.GetValue<int>("EmailSettings:SmtpPort", 587);
-            var smtpPassword = _configuration["EmailSettings:SmtpPassword"];
             var fromEmail = _configuration["EmailSettings:FromEmail"] ?? "noreply@victoriadexne.com";
             var fromName = _configuration["EmailSettings:FromName"] ?? "Victoria Dexne";
 

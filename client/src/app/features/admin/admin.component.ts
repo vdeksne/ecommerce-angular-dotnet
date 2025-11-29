@@ -372,6 +372,11 @@ export class AdminComponent implements OnInit {
           this.totalItems = response.count;
         }
       },
+      error: (err) => {
+        // Error message is already shown by global error interceptor
+        // This handler is here for any component-specific error handling if needed
+        console.error('Error loading orders:', err);
+      },
     });
   }
 

@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using API.DTOs;
 using API.Extensions;
 using Core.Entities;
@@ -134,6 +134,43 @@ public class AccountController(SignInManager<AppUser> signInManager) : BaseApiCo
         if (result.Succeeded)
         {
             return Ok(new { message = "Admin role assigned to admin@test.com", email = adminUser.Email });
+        }
+
+        return BadRequest(new { errors = result.Errors });
+    }
+
+    // Development-only endpoint to assign admin role to the currently logged-in user
+    // WARNING: Remove or secure this in production
+    [Authorize]
+    [HttpPost("assign-admin-to-self")]
+    public async Task<ActionResult> AssignAdminRoleToSelf()
+    {
+        var email = User.FindFirstValue(ClaimTypes.Email);
+        if (string.IsNullOrEmpty(email))
+        {
+            return BadRequest(new { error = "Email claim not found" });
+        }
+
+        var user = await signInManager.UserManager.FindByEmailAsync(email);
+        if (user == null)
+        {
+            return NotFound($"User with email {email} not found");
+        }
+
+        var isInAdminRole = await signInManager.UserManager.IsInRoleAsync(user, "Admin");
+        if (isInAdminRole)
+        {
+            return Ok(new { message = $"User {email} already has Admin role", email = email });
+        }
+
+        var result = await signInManager.UserManager.AddToRoleAsync(user, "Admin");
+        if (result.Succeeded)
+        {
+            return Ok(new 
+            { 
+                message = $"Admin role assigned to {email}. Please log out and log back in for the changes to take effect.", 
+                email = email 
+            });
         }
 
         return BadRequest(new { errors = result.Errors });

@@ -164,6 +164,38 @@ button[mat-flat-button]:not([disabled]) {
   }
 }
 
+.mat-mdc-stroked-button:not([disabled]),
+button[mat-stroked-button]:not([disabled]) {
+  --mdc-outlined-button-label-text-color: #000000 !important;
+  --mdc-outlined-button-outline-color: #000000 !important;
+  --mat-stroked-button-label-text-color: #000000 !important;
+  --mat-stroked-button-outline-color: #000000 !important;
+  color: #000000 !important;
+  border-color: #000000 !important;
+
+  &:hover {
+    --mdc-outlined-button-label-text-color: #000000 !important;
+    --mdc-outlined-button-outline-color: #000000 !important;
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    border-color: #000000 !important;
+  }
+
+  &.mat-primary,
+  &[color="primary"] {
+    --mdc-outlined-button-label-text-color: #000000 !important;
+    --mdc-outlined-button-outline-color: #000000 !important;
+    color: #000000 !important;
+    border-color: #000000 !important;
+
+    &:hover {
+      background-color: #000000 !important;
+      color: #ffffff !important;
+      border-color: #000000 !important;
+    }
+  }
+}
+
 .container {
   @apply mx-auto max-w-screen-2xl;
 }

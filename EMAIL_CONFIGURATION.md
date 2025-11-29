@@ -14,8 +14,8 @@ If you're not receiving order confirmation emails, it's likely because the email
   "EmailSettings": {
     "SmtpHost": "smtp.gmail.com",
     "SmtpPort": 587,
-    "SmtpUsername": "your-email@gmail.com",
-    "SmtpPassword": "your-app-password",
+    "SmtpUsername": "viktorijadeksne@gmail.com",
+    "SmtpPassword": "pgpi xrun tevh gbwt",
     "FromEmail": "noreply@victoriadexne.com",
     "FromName": "Victoria Dexne"
   }
